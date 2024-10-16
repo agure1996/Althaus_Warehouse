@@ -6,9 +6,9 @@ namespace Althaus_Warehouse.Controllers
 {
     public class TestController: Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<TestController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public TestController(ILogger<TestController> logger)
         {
             _logger = logger;
         }
