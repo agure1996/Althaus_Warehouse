@@ -9,11 +9,17 @@ Patch Notes:
   Checklist (✓)
 
   *set up db connection (mysql)
+
   *design tables (more than likely to generate tables using dbcontext mapper
+
   *create and map dto to crud requests
+
   *item object
+
   *be able to map through all objects
+
   *be able to grab specific object
+
   *be able to ask for specific object type
 
 
