@@ -60,6 +60,6 @@ namespace Althaus_Warehouse.Models.Entities
         /// Gets or sets the price of the item
         /// </summary>
         [Required]
-        public int Price { get; set; }
+        public double Price { get; set; }
     }
 }
