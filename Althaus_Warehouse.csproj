@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Models\DTO\" />
-    <Folder Include="Models\Entities\" />
     <Folder Include="Mappers\" />
     <Folder Include="Services\" />
   </ItemGroup>
