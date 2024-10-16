@@ -1,7 +1,9 @@
 Updating file using Vim
 
 Patch Notes:
+
 #0.1 - Set up folder structure
+
 #0.2 - Set up basic front end page with css changes
 
   Checklist (✓)
