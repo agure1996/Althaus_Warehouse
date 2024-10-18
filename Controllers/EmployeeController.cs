@@ -48,7 +48,7 @@ namespace Althaus_Warehouse.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<EmployeeDTO>>> GetEmployees()
         {
-            var employeeEntities = await _employeeRepository.GetEmployeesAsync();
+            var employeeEntities = await _employeeRepository.GetAllEmployeesAsync();
             if (employeeEntities == null || !employeeEntities.Any())
             {
                 return NotFound();
@@ -69,7 +69,7 @@ namespace Althaus_Warehouse.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetEmployeeById(int employeeId)
         {
-            var employeeEntity = await _employeeRepository.GetEmployeeAsync(employeeId);
+            var employeeEntity = await _employeeRepository.GetEmployeeByIdAsync(employeeId);
 
             if (employeeEntity == null)
             {
@@ -97,7 +97,7 @@ namespace Althaus_Warehouse.Controllers
             }
 
             var employeeEntity = _mapper.Map<Employee>(createEmployeeDto);
-            await _employeeRepository.CreateEmployeeAsync(employeeEntity);
+            await _employeeRepository.AddEmployeeAsync(employeeEntity);
 
             return CreatedAtAction(nameof(GetEmployeeById), new { employeeId = employeeEntity.Id }, _mapper.Map<EmployeeDTO>(employeeEntity));
         }
@@ -120,7 +120,7 @@ namespace Althaus_Warehouse.Controllers
                 return BadRequest(ModelState);
             }
 
-            var existingEmployee = await _employeeRepository.GetEmployeeAsync(employeeId);
+            var existingEmployee = await _employeeRepository.GetEmployeeByIdAsync(employeeId);
             if (existingEmployee == null)
             {
                 return NotFound();
@@ -144,13 +144,13 @@ namespace Althaus_Warehouse.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteEmployee(int employeeId)
         {
-            var employeeEntity = await _employeeRepository.GetEmployeeAsync(employeeId);
+            var employeeEntity = await _employeeRepository.GetEmployeeByIdAsync(employeeId);
             if (employeeEntity == null)
             {
                 return NotFound();
             }
 
-            await _employeeRepository.DeleteEmployeeAsync(employeeEntity);
+            await _employeeRepository.DeleteEmployeeAsync(employeeEntity.Id);
             return NoContent();
         }
     }
