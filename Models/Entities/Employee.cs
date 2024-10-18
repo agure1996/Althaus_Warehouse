@@ -28,7 +28,7 @@ namespace Althaus_Warehouse.Models.Entities
             LastName = lastName;
             Email = email;
             EmployeeType = employeeType;
-            DateHired = DateTime.Now;
+            DateHired = DateTime.Today;
         }
 
         /// <summary>

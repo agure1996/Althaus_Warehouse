@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Althaus_Warehouse.Models.Entities
 {
-
     /// <summary>
     /// Entity class representing a warehouse item
     /// </summary>
@@ -22,13 +21,14 @@ namespace Althaus_Warehouse.Models.Entities
         /// <param name="description">Brief description of item</param>
         /// <param name="quantity">Current quantity of item</param>
         /// <param name="price">Item Price</param>
-        public Item(int id, string name, string description, int quantity, int price)
+        public Item(int id, string name, string description, int quantity, double price)
         {
             Id = id;
             Name = name;
             Description = description;
             Quantity = quantity;
             Price = price;
+            DateCreated = DateTime.Today; // Set the date created when creating the item
         }
 
         /// <summary>
@@ -61,5 +61,10 @@ namespace Althaus_Warehouse.Models.Entities
         /// </summary>
         [Required]
         public double Price { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date when the item was created
+        /// </summary>
+        public DateOnly DateCreated { get; set; }
     }
 }

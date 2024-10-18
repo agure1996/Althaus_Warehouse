@@ -31,6 +31,11 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         /// </summary>
         [Required]
         public double Price { get; set; }
+
+        /// <summary>
+        /// Date created in dd/MM/yyyy format
+        /// </summary>
+        public string DateCreated { get { return DateTime.Today.ToString("dd/MM/yyyy"); } }
     }
 
 }
