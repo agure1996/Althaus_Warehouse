@@ -14,21 +14,17 @@ namespace Althaus_Warehouse.Mappings
         /// </summary>
         public EmployeeProfile()
         {
-            /// <summary>
-            /// Map from Employee entity to GetEmployeeDTO for GET requests.
-            /// </summary>
-            CreateMap<Employee, GetEmployeeDTO>();
+            // Map from Employee entity to EmployeeDTO for GET requests.
+            CreateMap<Employee, EmployeeDTO>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}")) // Combine first and last names
+                .ForMember(dest => dest.HireDate, opt => opt.MapFrom(src => src.DateHired))
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.EmployeeType));
 
-            /// <summary>
-            /// Map from CreateEmployeeDTO to Employee entity for POST/Create requests.
-            /// Automatically sets DateHired to today's date for simplicity when inputting into Database.
-            /// </summary>
+            // Map from CreateEmployeeDTO to Employee entity for POST/Create requests.
             CreateMap<CreateEmployeeDTO, Employee>()
-                .ForMember(dest => dest.DateHired, opt => opt.MapFrom(src => DateTime.Today)); 
+                .ForMember(dest => dest.DateHired, opt => opt.MapFrom(src => DateTime.Today));
 
-            /// <summary>
-            /// Map from UpdateEmployeeDTO to Employee entity for PUT/Update requests.
-            /// </summary>
+            // Map from UpdateEmployeeDTO to Employee entity for PUT/Update requests.
             CreateMap<UpdateEmployeeDTO, Employee>();
         }
     }

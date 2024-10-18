@@ -1,15 +1,10 @@
-﻿using Asp.Versioning;
+﻿
 using AutoMapper;
-using Althaus_Warehouse.Models;
 using Althaus_Warehouse.Models.DTO.EmployeeDTOs;
-using Althaus_Warehouse.Services; // Assuming you have a service/repository for employee operations
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Althaus_Warehouse.Models.Entities;
 using Althaus_Warehouse.Services.Repositories;
-
 namespace Althaus_Warehouse.Controllers
 {
     /// <summary>
@@ -17,9 +12,9 @@ namespace Althaus_Warehouse.Controllers
     /// Supports API versioning and uses a repository pattern to fetch data.
     /// </summary>
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("api/v{version:apiVersion}/employees")]
-    [ApiVersion(1)]
+    [Asp.Versioning.ApiVersion(1.0)]
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeRepository _employeeRepository; // Assuming this is the repository for employee operations
@@ -139,7 +134,7 @@ namespace Althaus_Warehouse.Controllers
         /// <response code="204">Employee deleted successfully.</response>
         /// <response code="404">Employee not found.</response>
         [HttpDelete("{employeeId}")]
-        [Authorize(Policy = "RequireAdminRole")] // Only admins can delete employees
+        //[Authorize(Policy = "RequireAdminRole")] // Only admins can delete employees
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteEmployee(int employeeId)

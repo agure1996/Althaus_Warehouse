@@ -34,6 +34,7 @@ namespace Althaus_Warehouse.Services.Repositories
         {
             // Add a new employee to the database
             await _context.Employees.AddAsync(employee);
+            await _context.SaveChangesAsync();
         }
 
         /// <inheritdoc/>
@@ -41,6 +42,7 @@ namespace Althaus_Warehouse.Services.Repositories
         {
             // Update an existing employee in the database
             _context.Employees.Update(employee);
+            await _context.SaveChangesAsync();
         }
 
         /// <inheritdoc/>
@@ -51,6 +53,7 @@ namespace Althaus_Warehouse.Services.Repositories
             if (employee != null)
             {
                 _context.Employees.Remove(employee);
+                await _context.SaveChangesAsync();
             }
         }
 

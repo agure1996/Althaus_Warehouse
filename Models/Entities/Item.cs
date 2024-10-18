@@ -11,7 +11,10 @@ namespace Althaus_Warehouse.Models.Entities
         /// <summary>
         /// Default no-args constructor for Item.
         /// </summary>
-        public Item() { }
+        public Item()
+        {
+            DateCreated = DateOnly.FromDateTime(DateTime.Now);
+        }
 
         /// <summary>
         /// Constructor for creating an item with all details.
@@ -32,7 +35,6 @@ namespace Althaus_Warehouse.Models.Entities
             Price = price;
             CreatedById = createdById;
             ItemType = itemType;
-            DateCreated = DateOnly.FromDateTime(DateTime.Now);
         }
 
         /// <summary>
@@ -58,12 +60,14 @@ namespace Althaus_Warehouse.Models.Entities
         /// <summary>
         /// Gets or sets the current quantity of the item in stock.
         /// </summary>
+        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be a positive number.")]
         public int Quantity { get; set; }
 
         /// <summary>
         /// Gets or sets the price of the item.
         /// </summary>
         [Required]
+        [Range(0.0, double.MaxValue, ErrorMessage = "Price must be a positive number.")]
         public double Price { get; set; }
 
         /// <summary>

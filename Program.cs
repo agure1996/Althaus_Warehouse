@@ -1,5 +1,8 @@
 using Althaus_Warehouse.DBContext;
+using Althaus_Warehouse.MappingProfiles;
+using Althaus_Warehouse.Mappings;
 using Althaus_Warehouse.Services.Repositories;
+using Asp.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -37,7 +40,15 @@ namespace Althaus_Warehouse
             builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
             // Add AutoMapper for object mapping when making calls at endpoints instead of writing everything out I automap using mapper and my preconfigured entities and dtos
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddAutoMapper(typeof(EmployeeProfile), typeof(ItemProfile));
+
+            // Add API versioning
+            builder.Services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+            });
 
 
             var app = builder.Build();

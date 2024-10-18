@@ -1,52 +1,50 @@
-﻿using System;
+﻿using Althaus_Warehouse.Models.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace Althaus_Warehouse.Models.DTO.ItemDTOs
 {
     /// <summary>
-    /// Data Transfer Object for creating a new item
+    /// Data Transfer Object for creating a new item.
     /// </summary>
     public class CreateItemDTO
     {
         /// <summary>
-        /// Gets or sets the name of the item
+        /// Gets or sets the name of the item.
         /// </summary>
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets a brief description of the item
+        /// Gets or sets a brief description of the item.
         /// </summary>
         [MaxLength(200)]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the quantity of the item to be added to inventory
+        /// Gets or sets the current quantity of the item in stock.
         /// </summary>
         [Required]
+        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be a positive number.")]
         public int Quantity { get; set; }
 
         /// <summary>
-        /// Gets or sets the price of the item
+        /// Gets or sets the price of the item.
         /// </summary>
         [Required]
+        [Range(0.0, double.MaxValue, ErrorMessage = "Price must be a positive number.")]
         public double Price { get; set; }
 
         /// <summary>
-        /// Gets or sets the ID of the employee creating the item
+        /// Gets or sets the ID of the employee who created the item.
+        /// Nullable for bulk imports or other use cases.
+        /// </summary>
+        public int? CreatedById { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type/category of the item.
         /// </summary>
         [Required]
-        public int CreatedById { get; set; }
+        public ItemType ItemType { get; set; }
     }
 }
-
-
-/*
- * for later:
- * CreateMap<CreateItemDTO, Item>()
-    .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateTime.Now)) // Set DateCreated automatically on create
-    .ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById)); // Map CreatedById
-
- * 
- */

@@ -17,6 +17,9 @@ namespace Althaus_Warehouse.MappingProfiles
             // Mapping from Item to GetItemDTO (read operations)
             CreateMap<Item, GetItemDTO>();
 
+            // Mapping from Item to ListItemsDTO (for listing items)
+            CreateMap<Item, ListItemsDTO>();
+
             // Mapping from CreateItemDTO to Item (create operations)
             CreateMap<CreateItemDTO, Item>()
                 .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateTime.Today)) // Set DateCreated automatically

@@ -1,9 +1,7 @@
 ﻿using Althaus_Warehouse.Models.DTO.ItemDTOs;
 using Althaus_Warehouse.Models.Entities;
 using Althaus_Warehouse.Services.Repositories;
-using Asp.Versioning;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +12,9 @@ namespace MyWarehouse.API.Controllers
     /// Controller to manage operations related to items in the warehouse.
     /// </summary>
     [Route("api/v{version:apiVersion}/items")]
-    [ApiVersion("1.0")]
+    [Asp.Versioning.ApiVersion(1.0)]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ItemsController : ControllerBase
     {
         private readonly ILogger<ItemsController> _logger;
