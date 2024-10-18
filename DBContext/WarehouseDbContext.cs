@@ -3,30 +3,39 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Althaus_Warehouse.DBContext
 {
+    /// <summary>
+    /// Database context class for the warehouse.
+    /// This context manages interactions between the application and the database.
+    /// </summary>
     public class WarehouseDbContext : DbContext
     {
         /// <summary>
-        /// This is the constructor for my database context.
+        /// Constructor for WarehouseDbContext.
         /// It sets up the options (like the connection string) that Entity Framework Core needs to use.
         /// </summary>
         /// <param name="options">Options passed by dependency injection, contains things like the connection string</param>
         public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options) : base(options) { }
 
-        // This represents the Items table in the database.
+        /// <summary>
+        /// Represents the Items table in the database.
+        /// </summary>
         public DbSet<Item> Items { get; set; }
 
-        // This represents the Employees table in the database.
+        /// <summary>
+        /// Represents the Employees table in the database.
+        /// </summary>
         public DbSet<Employee> Employees { get; set; }
 
         /// <summary>
-        /// Override OnModelCreating to seed dummy data into the database
+        /// Override OnModelCreating to seed dummy data into the database.
+        /// This method is used to define relationships, constraints, and seed initial data.
         /// </summary>
-        /// <param name="modelBuilder">ModelBuilder to configure entities</param>
+        /// <param name="modelBuilder">The ModelBuilder used to configure the database schema</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Seed some Employees into the data
+            // Seed some Employees into the database
             modelBuilder.Entity<Employee>().HasData(
                 new Employee
                 {
@@ -34,7 +43,7 @@ namespace Althaus_Warehouse.DBContext
                     FirstName = "Jimmy",
                     LastName = "Jackson",
                     Email = "jim.jack@altwarehouse.com",
-                    EmployeeType = EmployeeType.Manager,  // Using the enum value for employee types
+                    EmployeeType = EmployeeType.Manager,
                     DateHired = new DateTime(2020, 01, 15),
                     IsActive = true
                 },
@@ -70,99 +79,109 @@ namespace Althaus_Warehouse.DBContext
                 }
             );
 
+            // Seed some Items into the database with the new ItemType enum
             modelBuilder.Entity<Item>().HasData(
-                    new Item
-                    {
-                        Id = 1,
-                        Name = "Laptop",
-                        Description = "15-inch laptop with 8GB RAM",
-                        Quantity = 50,
-                        Price = 599.99,
-                        CreatedById = 1  // Created by John Doe (Manager)
-                    },
-                    new Item
-                    {
-                        Id = 2,
-                        Name = "Monitor",
-                        Description = "24-inch full HD monitor",
-                        Quantity = 75,
-                        Price = 149.99,
-                        CreatedById = 2  // Created by Jane Smith (HR)
-                    },
-                    new Item
-                    {
-                        Id = 3,
-                        Name = "Mouse",
-                        Description = "Wireless mouse",
-                        Quantity = 200,
-                        Price = 19.99,
-                        CreatedById = 3  // Created by Emily Johnson (Sales)
-                    },
-                    new Item
-                    {
-                        Id = 4,
-                        Name = "Keyboard",
-                        Description = "Mechanical keyboard with RGB lighting",
-                        Quantity = 150,
-                        Price = 89.99,
-                        CreatedById = 3
-                    },
-                    new Item
-                    {
-                        Id = 5,
-                        Name = "External Hard Drive",
-                        Description = "1TB external hard drive with USB 3.0",
-                        Quantity = 80,
-                        Price = 79.99,
-                        CreatedById = 1
-                    },
-                    new Item
-                    {
-                        Id = 6,
-                        Name = "Webcam",
-                        Description = "1080p HD webcam",
-                        Quantity = 100,
-                        Price = 39.99,
-                        CreatedById = 2
-                    },
-                    new Item
-                    {
-                        Id = 7,
-                        Name = "Printer",
-                        Description = "Wireless all-in-one printer",
-                        Quantity = 40,
-                        Price = 129.99,
-                        CreatedById = 1
-                    },
-                    new Item
-                    {
-                        Id = 8,
-                        Name = "Smartphone",
-                        Description = "5G smartphone with 128GB storage",
-                        Quantity = 30,
-                        Price = 799.99,
-                        CreatedById = 3
-                    },
-                    new Item
-                    {
-                        Id = 9,
-                        Name = "Headphones",
-                        Description = "Noise-cancelling wireless headphones",
-                        Quantity = 120,
-                        Price = 199.99,
-                        CreatedById = 2
-                    },
-                    new Item
-                    {
-                        Id = 10,
-                        Name = "Office Chair",
-                        Description = "Ergonomic office chair with lumbar support",
-                        Quantity = 60,
-                        Price = 249.99,
-                        CreatedById = 1
-                    }
-                );
-
+                new Item
+                {
+                    Id = 1,
+                    Name = "Laptop",
+                    Description = "15-inch laptop with 8GB RAM",
+                    Quantity = 50,
+                    Price = 599.99,
+                    CreatedById = 1, 
+                    ItemType = ItemType.Computers 
+                },
+                new Item
+                {
+                    Id = 2,
+                    Name = "Office Chair",
+                    Description = "Ergonomic office chair with lumbar support",
+                    Quantity = 60,
+                    Price = 249.99,
+                    CreatedById = 2,
+                    ItemType = ItemType.Furniture 
+                },
+                new Item
+                {
+                    Id = 3,
+                    Name = "Mouse",
+                    Description = "Wireless mouse",
+                    Quantity = 200,
+                    Price = 19.99,
+                    CreatedById = 3, 
+                    ItemType = ItemType.OfficeSupplies 
+                },
+                new Item
+                {
+                    Id = 4,
+                    Name = "Keyboard",
+                    Description = "Mechanical keyboard with RGB lighting",
+                    Quantity = 150,
+                    Price = 89.99,
+                    CreatedById = 3, 
+                    ItemType = ItemType.OfficeSupplies 
+                },
+                new Item
+                {
+                    Id = 5,
+                    Name = "Milk",
+                    Description = "Fresh dairy milk",
+                    Quantity = 80,
+                    Price = 1.99,
+                    CreatedById = 1, 
+                    ItemType = ItemType.Dairy 
+                },
+                new Item
+                {
+                    Id = 6,
+                    Name = "Chicken Breast",
+                    Description = "Organic chicken breast",
+                    Quantity = 100,
+                    Price = 5.99,
+                    CreatedById = 2, 
+                    ItemType = ItemType.Meat 
+                },
+                new Item
+                {
+                    Id = 7,
+                    Name = "Smartphone",
+                    Description = "5G smartphone with 128GB storage",
+                    Quantity = 30,
+                    Price = 799.99,
+                    CreatedById = 1, 
+                    ItemType = ItemType.Electronics
+                },
+                new Item
+                {
+                    Id = 8,
+                    Name = "Running Shoes",
+                    Description = "Lightweight running shoes",
+                    Quantity = 50,
+                    Price = 59.99,
+                    CreatedById = 3, 
+                    ItemType = ItemType.Footwear 
+                },
+                new Item
+                {
+                    Id = 9,
+                    Name = "Printer",
+                    Description = "Wireless all-in-one printer",
+                    Quantity = 40,
+                    Price = 129.99,
+                    CreatedById = 2, 
+                    ItemType = ItemType.OfficeSupplies
+                },
+                new Item
+                {
+                    Id = 10,
+                    Name = "Book: C# Programming",
+                    Description = "A comprehensive guide to C# programming",
+                    Quantity = 100,
+                    Price = 39.99,
+                    CreatedById = 1,
+                    ItemType = ItemType.Books 
+                }
+            );
         }
     }
 }

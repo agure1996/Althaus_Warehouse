@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Althaus_Warehouse.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class SeededDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,7 +52,8 @@ namespace Althaus_Warehouse.Migrations
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<double>(type: "double", nullable: false),
                     CreatedById = table.Column<int>(type: "int", nullable: true),
-                    DateCreated = table.Column<DateOnly>(type: "date", nullable: false)
+                    DateCreated = table.Column<DateOnly>(type: "date", nullable: false),
+                    ItemType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,19 +79,19 @@ namespace Althaus_Warehouse.Migrations
 
             migrationBuilder.InsertData(
                 table: "Items",
-                columns: new[] { "Id", "CreatedById", "DateCreated", "Description", "Name", "Price", "Quantity" },
+                columns: new[] { "Id", "CreatedById", "DateCreated", "Description", "ItemType", "Name", "Price", "Quantity" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateOnly(1, 1, 1), "15-inch laptop with 8GB RAM", "Laptop", 599.99000000000001, 50 },
-                    { 2, 2, new DateOnly(1, 1, 1), "24-inch full HD monitor", "Monitor", 149.99000000000001, 75 },
-                    { 3, 3, new DateOnly(1, 1, 1), "Wireless mouse", "Mouse", 19.989999999999998, 200 },
-                    { 4, 3, new DateOnly(1, 1, 1), "Mechanical keyboard with RGB lighting", "Keyboard", 89.989999999999995, 150 },
-                    { 5, 1, new DateOnly(1, 1, 1), "1TB external hard drive with USB 3.0", "External Hard Drive", 79.989999999999995, 80 },
-                    { 6, 2, new DateOnly(1, 1, 1), "1080p HD webcam", "Webcam", 39.990000000000002, 100 },
-                    { 7, 1, new DateOnly(1, 1, 1), "Wireless all-in-one printer", "Printer", 129.99000000000001, 40 },
-                    { 8, 3, new DateOnly(1, 1, 1), "5G smartphone with 128GB storage", "Smartphone", 799.99000000000001, 30 },
-                    { 9, 2, new DateOnly(1, 1, 1), "Noise-cancelling wireless headphones", "Headphones", 199.99000000000001, 120 },
-                    { 10, 1, new DateOnly(1, 1, 1), "Ergonomic office chair with lumbar support", "Office Chair", 249.99000000000001, 60 }
+                    { 1, 1, new DateOnly(1, 1, 1), "15-inch laptop with 8GB RAM", 23, "Laptop", 599.99000000000001, 50 },
+                    { 2, 2, new DateOnly(1, 1, 1), "Ergonomic office chair with lumbar support", 7, "Office Chair", 249.99000000000001, 60 },
+                    { 3, 3, new DateOnly(1, 1, 1), "Wireless mouse", 22, "Mouse", 19.989999999999998, 200 },
+                    { 4, 3, new DateOnly(1, 1, 1), "Mechanical keyboard with RGB lighting", 22, "Keyboard", 89.989999999999995, 150 },
+                    { 5, 1, new DateOnly(1, 1, 1), "Fresh dairy milk", 0, "Milk", 1.99, 80 },
+                    { 6, 2, new DateOnly(1, 1, 1), "Organic chicken breast", 1, "Chicken Breast", 5.9900000000000002, 100 },
+                    { 7, 1, new DateOnly(1, 1, 1), "5G smartphone with 128GB storage", 6, "Smartphone", 799.99000000000001, 30 },
+                    { 8, 3, new DateOnly(1, 1, 1), "Lightweight running shoes", 29, "Running Shoes", 59.990000000000002, 50 },
+                    { 9, 2, new DateOnly(1, 1, 1), "Wireless all-in-one printer", 22, "Printer", 129.99000000000001, 40 },
+                    { 10, 1, new DateOnly(1, 1, 1), "A comprehensive guide to C# programming", 11, "Book: C# Programming", 39.990000000000002, 100 }
                 });
 
             migrationBuilder.CreateIndex(

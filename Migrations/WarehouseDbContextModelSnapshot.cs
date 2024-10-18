@@ -120,6 +120,9 @@ namespace Althaus_Warehouse.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
+                    b.Property<int>("ItemType")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -144,6 +147,7 @@ namespace Althaus_Warehouse.Migrations
                             CreatedById = 1,
                             DateCreated = new DateOnly(1, 1, 1),
                             Description = "15-inch laptop with 8GB RAM",
+                            ItemType = 23,
                             Name = "Laptop",
                             Price = 599.99000000000001,
                             Quantity = 50
@@ -153,10 +157,11 @@ namespace Althaus_Warehouse.Migrations
                             Id = 2,
                             CreatedById = 2,
                             DateCreated = new DateOnly(1, 1, 1),
-                            Description = "24-inch full HD monitor",
-                            Name = "Monitor",
-                            Price = 149.99000000000001,
-                            Quantity = 75
+                            Description = "Ergonomic office chair with lumbar support",
+                            ItemType = 7,
+                            Name = "Office Chair",
+                            Price = 249.99000000000001,
+                            Quantity = 60
                         },
                         new
                         {
@@ -164,6 +169,7 @@ namespace Althaus_Warehouse.Migrations
                             CreatedById = 3,
                             DateCreated = new DateOnly(1, 1, 1),
                             Description = "Wireless mouse",
+                            ItemType = 22,
                             Name = "Mouse",
                             Price = 19.989999999999998,
                             Quantity = 200
@@ -174,6 +180,7 @@ namespace Althaus_Warehouse.Migrations
                             CreatedById = 3,
                             DateCreated = new DateOnly(1, 1, 1),
                             Description = "Mechanical keyboard with RGB lighting",
+                            ItemType = 22,
                             Name = "Keyboard",
                             Price = 89.989999999999995,
                             Quantity = 150
@@ -183,9 +190,10 @@ namespace Althaus_Warehouse.Migrations
                             Id = 5,
                             CreatedById = 1,
                             DateCreated = new DateOnly(1, 1, 1),
-                            Description = "1TB external hard drive with USB 3.0",
-                            Name = "External Hard Drive",
-                            Price = 79.989999999999995,
+                            Description = "Fresh dairy milk",
+                            ItemType = 0,
+                            Name = "Milk",
+                            Price = 1.99,
                             Quantity = 80
                         },
                         new
@@ -193,9 +201,10 @@ namespace Althaus_Warehouse.Migrations
                             Id = 6,
                             CreatedById = 2,
                             DateCreated = new DateOnly(1, 1, 1),
-                            Description = "1080p HD webcam",
-                            Name = "Webcam",
-                            Price = 39.990000000000002,
+                            Description = "Organic chicken breast",
+                            ItemType = 1,
+                            Name = "Chicken Breast",
+                            Price = 5.9900000000000002,
                             Quantity = 100
                         },
                         new
@@ -203,40 +212,44 @@ namespace Althaus_Warehouse.Migrations
                             Id = 7,
                             CreatedById = 1,
                             DateCreated = new DateOnly(1, 1, 1),
-                            Description = "Wireless all-in-one printer",
-                            Name = "Printer",
-                            Price = 129.99000000000001,
-                            Quantity = 40
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CreatedById = 3,
-                            DateCreated = new DateOnly(1, 1, 1),
                             Description = "5G smartphone with 128GB storage",
+                            ItemType = 6,
                             Name = "Smartphone",
                             Price = 799.99000000000001,
                             Quantity = 30
                         },
                         new
                         {
+                            Id = 8,
+                            CreatedById = 3,
+                            DateCreated = new DateOnly(1, 1, 1),
+                            Description = "Lightweight running shoes",
+                            ItemType = 29,
+                            Name = "Running Shoes",
+                            Price = 59.990000000000002,
+                            Quantity = 50
+                        },
+                        new
+                        {
                             Id = 9,
                             CreatedById = 2,
                             DateCreated = new DateOnly(1, 1, 1),
-                            Description = "Noise-cancelling wireless headphones",
-                            Name = "Headphones",
-                            Price = 199.99000000000001,
-                            Quantity = 120
+                            Description = "Wireless all-in-one printer",
+                            ItemType = 22,
+                            Name = "Printer",
+                            Price = 129.99000000000001,
+                            Quantity = 40
                         },
                         new
                         {
                             Id = 10,
                             CreatedById = 1,
                             DateCreated = new DateOnly(1, 1, 1),
-                            Description = "Ergonomic office chair with lumbar support",
-                            Name = "Office Chair",
-                            Price = 249.99000000000001,
-                            Quantity = 60
+                            Description = "A comprehensive guide to C# programming",
+                            ItemType = 11,
+                            Name = "Book: C# Programming",
+                            Price = 39.990000000000002,
+                            Quantity = 100
                         });
                 });
 
