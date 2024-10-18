@@ -57,6 +57,16 @@ namespace Althaus_Warehouse.DBContext
                     EmployeeType = EmployeeType.Sales,
                     DateHired = new DateTime(2022, 07, 25),
                     IsActive = true
+                },
+                new Employee
+                {
+                    Id = 4,
+                    FirstName = "Hamza",
+                    LastName = "Adam",
+                    Email = "hamza.adam@altwarehouse.com",
+                    EmployeeType = EmployeeType.Employee,
+                    DateHired = new DateTime(2021, 11, 02),
+                    IsActive = true
                 }
             );
 
