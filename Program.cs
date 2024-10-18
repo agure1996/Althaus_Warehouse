@@ -1,4 +1,5 @@
 using Althaus_Warehouse.DBContext;
+using Althaus_Warehouse.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -27,6 +28,17 @@ namespace Althaus_Warehouse
                 .WriteTo.Console() // Log to console
                 .WriteTo.File("logs/warehouse_logs.txt", rollingInterval: RollingInterval.Hour) // Log to a file with Hourly rolling
                 .CreateLogger();
+
+
+            // Register the EmployeeRepository
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+            // Register the ItemRepository
+            builder.Services.AddScoped<IItemRepository, ItemRepository>();
+
+            // Add AutoMapper for object mapping when making calls at endpoints instead of writing everything out I automap using mapper and my preconfigured entities and dtos
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
             var app = builder.Build();
 
