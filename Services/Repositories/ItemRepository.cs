@@ -22,6 +22,11 @@ namespace Althaus_Warehouse.Services.Repositories
         public async Task<IEnumerable<Item>> GetAllItemsAsync() =>
             // Retrieve all items from the database
             await _context.Items.ToListAsync();
+        public async Task<IEnumerable<Item>> GetItemsByCategoryAsync(ItemType value) =>
+            await _context.Items
+                .Where(item => item.ItemType == value) // Filter items by the specified ItemType
+                .ToListAsync(); // Execute the query and return the results as a list
+
 
         /// <inheritdoc/>
         public async Task<Item> GetItemByIdAsync(int id) =>

@@ -57,5 +57,6 @@ namespace Althaus_Warehouse.Services.Repositories
         /// </summary>
         /// <returns>True if the changes were saved successfully; otherwise, false.</returns>
         Task<bool> SaveChangesAsync();
+        Task<IEnumerable<Item>> GetItemsByCategoryAsync(ItemType value);
     }
 }

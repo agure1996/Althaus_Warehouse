@@ -4,6 +4,7 @@ using Althaus_Warehouse.Services.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace MyWarehouse.API.Controllers
@@ -137,6 +138,56 @@ namespace MyWarehouse.API.Controllers
 
             return NoContent();
         }
+
+        /// <summary>
+        /// Retrieves a list of items based on the specified category type.
+        /// </summary>
+        /// <param name="itemType">The category of items to retrieve. This should be a valid <see cref="ItemType"/> enum value.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation. The task result contains an <see cref="ActionResult{IEnumerable{GetItemDTO}}"/> 
+        /// which can be:
+        /// <list type="bullet">
+        ///     <item>
+        ///         <description>A 200 OK response containing a list of <see cref="GetItemDTO"/> if items are found.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>A 400 Bad Request response if the provided item type is invalid.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>A 404 Not Found response if no items are found for the specified category.</description>
+        ///     </item>
+        /// </list>
+        /// </returns>
+        /// <remarks>
+        /// Example request: GET /api/items/category?itemType=Electronics
+        /// </remarks>
+        [HttpGet("category")]
+        public async Task<ActionResult<IEnumerable<GetItemDTO>>> GetItemsByCategory([FromQuery] ItemType itemType)
+        {
+            // Validate that the itemType is a valid enum value
+            if (!Enum.IsDefined(typeof(ItemType), itemType))
+            {
+                return BadRequest("Invalid item type provided.");
+            }
+
+            // Retrieve the items by category
+            var items = await _itemRepository.GetItemsByCategoryAsync(itemType);
+
+            // Check if any items were found
+            if (items == null || !items.Any())
+            {
+                return NotFound($"No items found for the category: {itemType}");
+            }
+
+            // Map the items to DTOs
+            var itemDTOs = _mapper.Map<IEnumerable<GetItemDTO>>(items);
+
+            return Ok(itemDTOs);
+        }
+
+
+
+
 
         /// <summary>
         /// Deletes an item from the warehouse.
