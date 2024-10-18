@@ -1,6 +1,5 @@
 ﻿using Althaus_Warehouse.Models.Entities;
 using System;
-using System.Data;
 
 namespace Althaus_Warehouse.Models.Interfaces
 {
@@ -30,7 +29,7 @@ namespace Althaus_Warehouse.Models.Interfaces
         string Email { get; set; }
 
         /// <summary>
-        /// Role of the employee (Staff, Manager, Admin)
+        /// Role of the employee (e.g., Staff, Manager, Admin)
         /// </summary>
         EmployeeType EmployeeType { get; set; }
 
@@ -53,8 +52,8 @@ namespace Althaus_Warehouse.Models.Interfaces
         /// <summary>
         /// Promotes the employee to a new role
         /// </summary>
-        /// <param name="newRole">The new role to promote the employee to</param>
-        void Promote(Role newRole);
+        /// <param name="newRole">The new role (EmployeeType) to promote the employee to</param>
+        void Promote(EmployeeType newRole);
 
         /// <summary>
         /// Deactivates the employee, marking them as inactive
