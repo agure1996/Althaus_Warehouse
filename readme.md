@@ -8,15 +8,15 @@ Patch Notes:
 
   Checklist (✓)
 
-  *set up db connection (mysql)
+  *set up db connection (mysql) ✓
 
-  *design tables (more than likely to generate tables using dbcontext mapper
+  *design tables (more than likely to generate tables using dbcontext mapper ✓
 
-  *create and map dto to crud requests
+  *create and map dto to crud requests ✓
 
-  *item object
+  *item object ✓
 
-  *be able to map through all objects
+  *be able to map through all objects (wip) (create the endpoints and test using postman)
 
   *be able to grab specific object
 
