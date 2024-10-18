@@ -14,28 +14,19 @@ namespace Althaus_Warehouse.MappingProfiles
         /// </summary>
         public ItemProfile()
         {
-            /// <summary>
-            /// Mapping from Item to GetItemDTO
-            /// </summary>
+            // Mapping from Item to GetItemDTO (read operations)
             CreateMap<Item, GetItemDTO>();
 
-            /// <summary>
-            /// Mapping from CreateItemDTO to Item
-            /// </summary>
-            CreateMap<CreateItemDTO, Item>();
+            // Mapping from CreateItemDTO to Item (create operations)
+            CreateMap<CreateItemDTO, Item>()
+                .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateTime.Today)) // Set DateCreated automatically
+                .ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById)); // Map CreatedById
 
-            /// <summary>
-            /// Mapping from UpdateItemDTO to Item
-            /// </summary>
+            // Mapping from UpdateItemDTO to Item (update operations)
             CreateMap<UpdateItemDTO, Item>();
 
-            /// <summary>
-            /// When creating an item, set the DateHired property to the current date
-            /// </summary>
-            CreateMap<CreateItemDTO, Item>()
-            .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateTime.Now)) // Set DateCreated automatically on create
-               .ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById)); // Map CreatedById
-
+            // Optional: Reverse mapping for UpdateItemDTO if needed for flexibility
+            CreateMap<Item, UpdateItemDTO>().ReverseMap();
         }
     }
 }

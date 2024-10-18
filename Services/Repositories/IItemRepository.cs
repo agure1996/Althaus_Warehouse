@@ -2,7 +2,6 @@
 
 namespace Althaus_Warehouse.Services.Repositories
 {
-
     /// <summary>
     /// Interface for managing item data in the warehouse.
     /// </summary>
@@ -38,5 +37,25 @@ namespace Althaus_Warehouse.Services.Repositories
         /// </summary>
         /// <param name="id">The unique identifier of the item to delete.</param>
         Task DeleteItemAsync(int id);
+
+        /// <summary>
+        /// Checks if an item exists by its unique identifier.
+        /// </summary>
+        /// <param name="id">The unique identifier of the item to check.</param>
+        /// <returns>True if the item exists; otherwise, false.</returns>
+        Task<bool> ItemExistsAsync(int id);
+
+        /// <summary>
+        /// Retrieves items by their name.
+        /// </summary>
+        /// <param name="name">The name of the item.</param>
+        /// <returns>A list of matching <see cref="Item"/> objects.</returns>
+        Task<IEnumerable<Item>> GetItemsByNameAsync(string name);
+
+        /// <summary>
+        /// Saves any changes made in the repository to the database.
+        /// </summary>
+        /// <returns>True if the changes were saved successfully; otherwise, false.</returns>
+        Task<bool> SaveChangesAsync();
     }
 }

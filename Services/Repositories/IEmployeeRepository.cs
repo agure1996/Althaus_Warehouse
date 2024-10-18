@@ -18,7 +18,7 @@ namespace Althaus_Warehouse.Services.Repositories
         /// </summary>
         /// <param name="id">The unique identifier of the employee.</param>
         /// <returns>The <see cref="Employee"/> object if found; otherwise, null.</returns>
-        Task<Employee> GetEmployeeByIdAsync(int id);
+        Task<Employee?> GetEmployeeByIdAsync(int id); // Updated to return null if not found
 
         /// <summary>
         /// Adds a new employee to the warehouse.

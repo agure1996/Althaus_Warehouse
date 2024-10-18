@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Althaus_Warehouse.Services.Repositories
 {
-
     /// <summary>
     /// Repository class for managing employee data in the warehouse.
     /// Implements <see cref="IEmployeeRepository"/>.
@@ -17,31 +16,24 @@ namespace Althaus_Warehouse.Services.Repositories
         /// Initializes a new instance of the <see cref="EmployeeRepository"/> class.
         /// </summary>
         /// <param name="context">The database context to use.</param>
-        public EmployeeRepository(WarehouseDbContext context)
-        {
-            _context = context;
-        }
+        /// <exception cref="ArgumentNullException">Thrown when the provided context is null.</exception>
+        public EmployeeRepository(WarehouseDbContext context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
-        {
+        public async Task<IEnumerable<Employee>> GetAllEmployeesAsync() =>
             // Retrieve all employees from the database
-            return await _context.Employees.ToListAsync();
-        }
+            await _context.Employees.ToListAsync();
 
         /// <inheritdoc/>
-        public async Task<Employee> GetEmployeeByIdAsync(int id)
-        {
+        public async Task<Employee?> GetEmployeeByIdAsync(int id) =>
             // Retrieve a specific employee by its ID
-            return await _context.Employees.FindAsync(id);
-        }
+            await _context.Employees.FindAsync(id);
 
         /// <inheritdoc/>
         public async Task AddEmployeeAsync(Employee employee)
         {
             // Add a new employee to the database
             await _context.Employees.AddAsync(employee);
-            await _context.SaveChangesAsync();
         }
 
         /// <inheritdoc/>
@@ -49,7 +41,6 @@ namespace Althaus_Warehouse.Services.Repositories
         {
             // Update an existing employee in the database
             _context.Employees.Update(employee);
-            await _context.SaveChangesAsync();
         }
 
         /// <inheritdoc/>
@@ -60,8 +51,17 @@ namespace Althaus_Warehouse.Services.Repositories
             if (employee != null)
             {
                 _context.Employees.Remove(employee);
-                await _context.SaveChangesAsync();
             }
         }
+
+        /// <inheritdoc/>
+        public async Task<bool> EmployeeExistsAsync(int id) =>
+            // Check if an employee with the specified ID exists
+            await _context.Employees.AnyAsync(e => e.Id == id);
+
+        /// <inheritdoc/>
+        public async Task<bool> SaveChangesAsync() =>
+            // Save changes to the database
+            (await _context.SaveChangesAsync()) > 0;
     }
 }
