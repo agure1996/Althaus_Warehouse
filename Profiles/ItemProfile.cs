@@ -33,7 +33,9 @@ namespace Althaus_Warehouse.MappingProfiles
             /// When creating an item, set the DateHired property to the current date
             /// </summary>
             CreateMap<CreateItemDTO, Item>()
-                .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateTime.Today));
+            .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateTime.Now)) // Set DateCreated automatically on create
+               .ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById)); // Map CreatedById
+
         }
     }
 }

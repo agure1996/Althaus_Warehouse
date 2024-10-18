@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Althaus_Warehouse.Models.DTO.ItemDTOs
 {
@@ -18,10 +19,10 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         /// Gets or sets a brief description of the item
         /// </summary>
         [MaxLength(200)]
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the current quantity of the item in stock
+        /// Gets or sets the quantity of the item to be added to inventory
         /// </summary>
         [Required]
         public int Quantity { get; set; }
@@ -33,9 +34,19 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         public double Price { get; set; }
 
         /// <summary>
-        /// Date created in dd/MM/yyyy format
+        /// Gets or sets the ID of the employee creating the item
         /// </summary>
-        public string DateCreated { get { return DateTime.Today.ToString("dd/MM/yyyy"); } }
+        [Required]
+        public int CreatedById { get; set; }
     }
-
 }
+
+
+/*
+ * for later:
+ * CreateMap<CreateItemDTO, Item>()
+    .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateTime.Now)) // Set DateCreated automatically on create
+    .ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById)); // Map CreatedById
+
+ * 
+ */

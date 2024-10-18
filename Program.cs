@@ -1,3 +1,6 @@
+using Althaus_Warehouse.DBContext;
+using Microsoft.EntityFrameworkCore;
+
 namespace Althaus_Warehouse
 {
     public class Program
@@ -6,8 +9,13 @@ namespace Althaus_Warehouse
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Add services to the container
             builder.Services.AddControllersWithViews();
+
+            // Configure the DbContext for MySQL Database
+            builder.Services.AddDbContext<WarehouseDbContext>(options =>
+                options.UseMySql(builder.Configuration.GetConnectionString("WarehouseDbConnection"),
+                new MySqlServerVersion(new Version(8, 0, 23))));
 
             var app = builder.Build();
 

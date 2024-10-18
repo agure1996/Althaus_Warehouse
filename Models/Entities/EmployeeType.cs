@@ -2,6 +2,10 @@
 {
     public enum EmployeeType
     {
-        Manager, HR, Sales, Employee
+        Manager = 1,
+        HR = 2,
+        Sales = 3,
+        Employee = 4
     }
+
 }

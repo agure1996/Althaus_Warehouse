@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Althaus_Warehouse.Models.Entities
 {
@@ -21,14 +21,16 @@ namespace Althaus_Warehouse.Models.Entities
         /// <param name="description">Brief description of item</param>
         /// <param name="quantity">Current quantity of item</param>
         /// <param name="price">Item Price</param>
-        public Item(int id, string name, string description, int quantity, double price)
+        /// <param name="createdById">Id of the employee who created the item</param>
+        public Item(int id, string name, string description, int quantity, double price, int createdById)
         {
             Id = id;
             Name = name;
             Description = description;
             Quantity = quantity;
             Price = price;
-            DateCreated = DateTime.Today; // Set the date created when creating the item
+            CreatedById = createdById;
+            DateCreated = DateOnly.FromDateTime(DateTime.Now);
         }
 
         /// <summary>
@@ -63,8 +65,19 @@ namespace Althaus_Warehouse.Models.Entities
         public double Price { get; set; }
 
         /// <summary>
-        /// Gets or sets the date when the item was created
+        /// Gets or sets the ID of the employee who created the item
         /// </summary>
-        public DateOnly DateCreated { get; set; }
+        public int? CreatedById { get; set; } // Nullable in case of import or bulk actions
+
+        /// <summary>
+        /// Navigation property to the Employee who created the item
+        /// </summary>
+        [ForeignKey("CreatedById")]
+        public virtual Employee CreatedBy { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date the item was created
+        /// </summary>
+        public DateOnly DateCreated { get; set; }  // Include DateCreated property
     }
 }
