@@ -1,64 +1,31 @@
-﻿namespace Althaus_Warehouse.Models.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Althaus_Warehouse.Models.Entities
 {
     /// <summary>
-    /// Enum to hold the different item categories
+    /// Entity class representing an item category/type in the warehouse.
     /// </summary>
-    public enum ItemType
+    public class ItemType
     {
         /// <summary>
-        /// Perishable Goods 0-5
+        /// Gets or sets the unique identifier for the item type.
         /// </summary>
-        Dairy,
-        Meat,
-        Seafood,
-        Fruits,
-        Vegetables,
-        Beverages,
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
         /// <summary>
-        /// Non-Perishable Goods 6-13
+        /// Gets or sets the name of the item type/category.
         /// </summary>
-        Electronics,
-        Furniture,
-        Clothing,
-        Toys,
-        Stationery,
-        Books,
-        Tools,
-        CleaningSupplies,
+        [Required]
+        [MaxLength(50)]
+        public string Name { get; set; }
 
         /// <summary>
-        /// Household & Personal Care 14-16
+        /// Optional: A brief description of the item type/category.
         /// </summary>
-        PersonalCare,
-        HouseholdAppliances,
-        Cosmetics,
-
-        /// <summary>
-        /// Grocery Items 17-21
-        /// </summary>
-        Grocery,
-        Snacks,
-        BakingSupplies,
-        Spices,
-        Grains,
-
-        /// <summary>
-        /// Office Equipment 22-24
-        /// </summary>
-        OfficeSupplies,
-        Computers,
-        Monitors,
-
-        /// <summary>
-        /// Miscellaneous 25-29
-        /// </summary>
-        SportsEquipment,
-        Automotive,
-        HealthAndWellness,
-        Jewelry,
-        Footwear,
+        [MaxLength(200)]
+        public string Description { get; set; }
     }
-
-
 }

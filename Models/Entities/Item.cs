@@ -11,10 +11,7 @@ namespace Althaus_Warehouse.Models.Entities
         /// <summary>
         /// Default no-args constructor for Item.
         /// </summary>
-        public Item()
-        {
-            DateCreated = DateOnly.FromDateTime(DateTime.Now);
-        }
+        public Item() { }
 
         /// <summary>
         /// Constructor for creating an item with all details.
@@ -25,8 +22,8 @@ namespace Althaus_Warehouse.Models.Entities
         /// <param name="quantity">The quantity of the item in stock.</param>
         /// <param name="price">The price of the item.</param>
         /// <param name="createdById">The ID of the employee who created the item.</param>
-        /// <param name="itemType">The type/category of the item (e.g., Dairy, Electronics, etc.).</param>
-        public Item(int id, string name, string description, int quantity, double price, int createdById, ItemType itemType)
+        /// <param name="itemTypeId">The ID of the associated item type.</param>
+        public Item(int id, string name, string description, int quantity, double price, int createdById, int itemTypeId)
         {
             Id = id;
             Name = name;
@@ -34,7 +31,8 @@ namespace Althaus_Warehouse.Models.Entities
             Quantity = quantity;
             Price = price;
             CreatedById = createdById;
-            ItemType = itemType;
+            ItemTypeId = itemTypeId;
+            DateCreated = DateOnly.FromDateTime(DateTime.Now);
         }
 
         /// <summary>
@@ -60,14 +58,12 @@ namespace Althaus_Warehouse.Models.Entities
         /// <summary>
         /// Gets or sets the current quantity of the item in stock.
         /// </summary>
-        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be a positive number.")]
         public int Quantity { get; set; }
 
         /// <summary>
         /// Gets or sets the price of the item.
         /// </summary>
         [Required]
-        [Range(0.0, double.MaxValue, ErrorMessage = "Price must be a positive number.")]
         public double Price { get; set; }
 
         /// <summary>
@@ -88,9 +84,14 @@ namespace Althaus_Warehouse.Models.Entities
         public DateOnly DateCreated { get; set; }
 
         /// <summary>
-        /// Gets or sets the type/category of the item (e.g., Dairy, Electronics, etc.).
+        /// Gets or sets the foreign key of the item type associated with this item.
         /// </summary>
-        [Required]
-        public ItemType ItemType { get; set; }
+        [ForeignKey("ItemType")]
+        public int ItemTypeId { get; set; }
+
+        /// <summary>
+        /// Navigation property to the associated ItemType entity.
+        /// </summary>
+        public virtual ItemType ItemType { get; set; }
     }
 }

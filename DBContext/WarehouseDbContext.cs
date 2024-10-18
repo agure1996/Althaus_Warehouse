@@ -27,6 +27,11 @@ namespace Althaus_Warehouse.DBContext
         public DbSet<Employee> Employees { get; set; }
 
         /// <summary>
+        /// Represents the ItemTypes table in the database.
+        /// </summary>
+        public DbSet<ItemType> ItemTypes { get; set; }
+
+        /// <summary>
         /// Override OnModelCreating to seed dummy data into the database.
         /// This method is used to define relationships, constraints, and seed initial data.
         /// </summary>
@@ -35,7 +40,7 @@ namespace Althaus_Warehouse.DBContext
         {
             base.OnModelCreating(modelBuilder);
 
-            // Seed some Employees into the database
+            // Seeding Employees into the database
             modelBuilder.Entity<Employee>().HasData(
                 new Employee
                 {
@@ -79,7 +84,41 @@ namespace Althaus_Warehouse.DBContext
                 }
             );
 
-            // Seed some Items into the database with the new ItemType enum
+            // Seeding some ItemTypes into the database
+            modelBuilder.Entity<ItemType>().HasData(
+                new ItemType { Id = 1, Name = "Dairy", Description = "Perishable dairy products." },
+                new ItemType { Id = 2, Name = "Meat", Description = "Fresh meat products." },
+                new ItemType { Id = 3, Name = "Seafood", Description = "Various seafood items." },
+                new ItemType { Id = 4, Name = "Fruits", Description = "Fresh fruits." },
+                new ItemType { Id = 5, Name = "Vegetables", Description = "Fresh vegetables." },
+                new ItemType { Id = 6, Name = "Beverages", Description = "Various drinks." },
+                new ItemType { Id = 7, Name = "Electronics", Description = "Electronic devices." },
+                new ItemType { Id = 8, Name = "Furniture", Description = "Furniture items." },
+                new ItemType { Id = 9, Name = "Clothing", Description = "Clothing and apparel." },
+                new ItemType { Id = 10, Name = "Toys", Description = "Children's toys." },
+                new ItemType { Id = 11, Name = "Stationery", Description = "Office supplies." },
+                new ItemType { Id = 12, Name = "Books", Description = "Various books." },
+                new ItemType { Id = 13, Name = "Tools", Description = "Hand tools and equipment." },
+                new ItemType { Id = 14, Name = "Cleaning Supplies", Description = "Cleaning products." },
+                new ItemType { Id = 15, Name = "Personal Care", Description = "Personal care items." },
+                new ItemType { Id = 16, Name = "Household Appliances", Description = "Appliances for home use." },
+                new ItemType { Id = 17, Name = "Cosmetics", Description = "Beauty and cosmetic products." },
+                new ItemType { Id = 18, Name = "Grocery", Description = "Grocery items." },
+                new ItemType { Id = 19, Name = "Snacks", Description = "Snack foods." },
+                new ItemType { Id = 20, Name = "Baking Supplies", Description = "Ingredients for baking." },
+                new ItemType { Id = 21, Name = "Spices", Description = "Cooking spices." },
+                new ItemType { Id = 22, Name = "Grains", Description = "Various grains." },
+                new ItemType { Id = 23, Name = "Office Supplies", Description = "Supplies for office use." },
+                new ItemType { Id = 24, Name = "Computers", Description = "Computers and accessories." },
+                new ItemType { Id = 25, Name = "Monitors", Description = "Monitors and screens." },
+                new ItemType { Id = 26, Name = "Sports Equipment", Description = "Equipment for sports." },
+                new ItemType { Id = 27, Name = "Automotive", Description = "Automotive parts and supplies." },
+                new ItemType { Id = 28, Name = "Health and Wellness", Description = "Health products." },
+                new ItemType { Id = 29, Name = "Jewelry", Description = "Jewelry items." },
+                new ItemType { Id = 30, Name = "Footwear", Description = "Shoes and footwear." }
+            );
+
+            // Seed some Items into the database with the new ItemType foreign key
             modelBuilder.Entity<Item>().HasData(
                 new Item
                 {
@@ -88,8 +127,8 @@ namespace Althaus_Warehouse.DBContext
                     Description = "15-inch laptop with 8GB RAM",
                     Quantity = 50,
                     Price = 599.99,
-                    CreatedById = 1, 
-                    ItemType = ItemType.Computers 
+                    CreatedById = 1,
+                    ItemTypeId = 24 
                 },
                 new Item
                 {
@@ -99,7 +138,7 @@ namespace Althaus_Warehouse.DBContext
                     Quantity = 60,
                     Price = 249.99,
                     CreatedById = 2,
-                    ItemType = ItemType.Furniture 
+                    ItemTypeId = 8 
                 },
                 new Item
                 {
@@ -108,8 +147,8 @@ namespace Althaus_Warehouse.DBContext
                     Description = "Wireless mouse",
                     Quantity = 200,
                     Price = 19.99,
-                    CreatedById = 3, 
-                    ItemType = ItemType.OfficeSupplies 
+                    CreatedById = 3,
+                    ItemTypeId = 11 
                 },
                 new Item
                 {
@@ -118,8 +157,8 @@ namespace Althaus_Warehouse.DBContext
                     Description = "Mechanical keyboard with RGB lighting",
                     Quantity = 150,
                     Price = 89.99,
-                    CreatedById = 3, 
-                    ItemType = ItemType.OfficeSupplies 
+                    CreatedById = 3,
+                    ItemTypeId = 11
                 },
                 new Item
                 {
@@ -128,8 +167,8 @@ namespace Althaus_Warehouse.DBContext
                     Description = "Fresh dairy milk",
                     Quantity = 80,
                     Price = 1.99,
-                    CreatedById = 1, 
-                    ItemType = ItemType.Dairy 
+                    CreatedById = 1,
+                    ItemTypeId = 1 
                 },
                 new Item
                 {
@@ -138,8 +177,8 @@ namespace Althaus_Warehouse.DBContext
                     Description = "Organic chicken breast",
                     Quantity = 100,
                     Price = 5.99,
-                    CreatedById = 2, 
-                    ItemType = ItemType.Meat 
+                    CreatedById = 2,
+                    ItemTypeId = 2
                 },
                 new Item
                 {
@@ -148,8 +187,8 @@ namespace Althaus_Warehouse.DBContext
                     Description = "5G smartphone with 128GB storage",
                     Quantity = 30,
                     Price = 799.99,
-                    CreatedById = 1, 
-                    ItemType = ItemType.Electronics
+                    CreatedById = 1,
+                    ItemTypeId = 7 
                 },
                 new Item
                 {
@@ -158,8 +197,8 @@ namespace Althaus_Warehouse.DBContext
                     Description = "Lightweight running shoes",
                     Quantity = 50,
                     Price = 59.99,
-                    CreatedById = 3, 
-                    ItemType = ItemType.Footwear 
+                    CreatedById = 3,
+                    ItemTypeId = 30 
                 },
                 new Item
                 {
@@ -168,8 +207,8 @@ namespace Althaus_Warehouse.DBContext
                     Description = "Wireless all-in-one printer",
                     Quantity = 40,
                     Price = 129.99,
-                    CreatedById = 2, 
-                    ItemType = ItemType.OfficeSupplies
+                    CreatedById = 2,
+                    ItemTypeId = 11 
                 },
                 new Item
                 {
@@ -179,7 +218,7 @@ namespace Althaus_Warehouse.DBContext
                     Quantity = 100,
                     Price = 39.99,
                     CreatedById = 1,
-                    ItemType = ItemType.Books 
+                    ItemTypeId = 12 
                 }
             );
         }
