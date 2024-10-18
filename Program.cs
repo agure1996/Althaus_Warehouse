@@ -1,5 +1,6 @@
 using Althaus_Warehouse.DBContext;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Althaus_Warehouse
 {
@@ -16,6 +17,16 @@ namespace Althaus_Warehouse
             builder.Services.AddDbContext<WarehouseDbContext>(options =>
                 options.UseMySql(builder.Configuration["ConnectionStrings:WarehouseDbConnection"],
                 new MySqlServerVersion(new Version(8, 0, 23))));
+
+
+
+            //Adding Serilog for logging capabilities
+            // Serilog logger configuration
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug() // Set the minimum log level
+                .WriteTo.Console() // Log to console
+                .WriteTo.File("logs/warehouse_logs.txt", rollingInterval: RollingInterval.Hour) // Log to a file with Hourly rolling
+                .CreateLogger();
 
             var app = builder.Build();
 
