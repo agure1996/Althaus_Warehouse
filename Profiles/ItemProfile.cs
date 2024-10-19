@@ -15,14 +15,17 @@ namespace Althaus_Warehouse.MappingProfiles
         public ItemProfile()
         {
             // Mapping from Item to GetItemDTO (read operations)
-            CreateMap<Item, GetItemDTO>();
+            CreateMap<Item, GetItemDTO>()
+                .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => src.DateCreated.Date)) // Assuming DateCreated is DateTime
+                .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.ItemType != null ? src.ItemType : null))
+                .ForMember(dest => dest.InStock, opt => opt.MapFrom(src => src.Quantity > 0));
 
             // Mapping from Item to ListItemsDTO (for listing items)
             CreateMap<Item, ListItemsDTO>();
 
             // Mapping from CreateItemDTO to Item (create operations)
             CreateMap<CreateItemDTO, Item>()
-                .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateTime.Today)) // Set DateCreated automatically
+                .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateTime.UtcNow)) // Automatically set DateCreated
                 .ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById)); // Map CreatedById
 
             // Mapping from UpdateItemDTO to Item (update operations)

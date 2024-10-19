@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Althaus_Warehouse.Models.Entities
@@ -11,7 +12,10 @@ namespace Althaus_Warehouse.Models.Entities
         /// <summary>
         /// Default no-args constructor for Item.
         /// </summary>
-        public Item() { }
+        public Item()
+        {
+            DateCreated = DateTime.UtcNow; // Automatically set the date when an item is created
+        }
 
         /// <summary>
         /// Constructor for creating an item with all details.
@@ -23,7 +27,7 @@ namespace Althaus_Warehouse.Models.Entities
         /// <param name="price">The price of the item.</param>
         /// <param name="createdById">The ID of the employee who created the item.</param>
         /// <param name="itemTypeId">The ID of the associated item type.</param>
-        public Item(int id, string name, string description, int quantity, double price, int createdById, int itemTypeId)
+        public Item(int id, string name, string description, int quantity, double price, int? createdById, int itemTypeId)
         {
             Id = id;
             Name = name;
@@ -32,7 +36,7 @@ namespace Althaus_Warehouse.Models.Entities
             Price = price;
             CreatedById = createdById;
             ItemTypeId = itemTypeId;
-            DateCreated = DateOnly.FromDateTime(DateTime.Now);
+            DateCreated = DateTime.UtcNow; // Automatically set the date when an item is created
         }
 
         /// <summary>
@@ -81,17 +85,22 @@ namespace Althaus_Warehouse.Models.Entities
         /// <summary>
         /// Gets or sets the date the item was created in the system.
         /// </summary>
-        public DateOnly DateCreated { get; set; }
+        public DateTime DateCreated { get; set; }  // Use DateTime instead of DateOnly
 
         /// <summary>
         /// Gets or sets the foreign key of the item type associated with this item.
         /// </summary>
-        [ForeignKey("ItemType")]
         public int ItemTypeId { get; set; }
 
         /// <summary>
-        /// Navigation property to the associated ItemType entity.
+        /// Navigation property to the ItemType.
         /// </summary>
-        public virtual ItemType ItemType { get; set; }
+        public virtual ItemType ItemType { get; set; }  // Ensure this is eager-loaded when needed
+
+        /// <summary>
+        /// Gets a value indicating whether the item is in stock.
+        /// </summary>
+        [NotMapped]  // This property won't be part of the database schema
+        public bool InStock => Quantity > 0;
     }
 }

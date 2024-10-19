@@ -42,5 +42,11 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         /// Gets or sets the type/category of the item.
         /// </summary>
         public ItemType ItemType { get; set; }
+        
+        /// <summary>
+        /// Gets or sets stock of item
+        /// </summary>
+        public bool InStock { get; set; }
+
     }
 }

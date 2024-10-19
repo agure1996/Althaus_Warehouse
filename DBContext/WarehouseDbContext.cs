@@ -1,41 +1,17 @@
 ﻿using Althaus_Warehouse.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Althaus_Warehouse.DBContext
 {
-    /// <summary>
-    /// Database context class for the warehouse.
-    /// This context manages interactions between the application and the database.
-    /// </summary>
     public class WarehouseDbContext : DbContext
     {
-        /// <summary>
-        /// Constructor for WarehouseDbContext.
-        /// It sets up the options (like the connection string) that Entity Framework Core needs to use.
-        /// </summary>
-        /// <param name="options">Options passed by dependency injection, contains things like the connection string</param>
         public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options) : base(options) { }
 
-        /// <summary>
-        /// Represents the Items table in the database.
-        /// </summary>
         public DbSet<Item> Items { get; set; }
-
-        /// <summary>
-        /// Represents the Employees table in the database.
-        /// </summary>
         public DbSet<Employee> Employees { get; set; }
-
-        /// <summary>
-        /// Represents the ItemTypes table in the database.
-        /// </summary>
         public DbSet<ItemType> ItemTypes { get; set; }
 
-        /// <summary>
-        /// Override OnModelCreating to seed dummy data into the database.
-        /// This method is used to define relationships, constraints, and seed initial data.
-        /// </summary>
-        /// <param name="modelBuilder">The ModelBuilder used to configure the database schema</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -84,7 +60,7 @@ namespace Althaus_Warehouse.DBContext
                 }
             );
 
-            // Seeding some ItemTypes into the database
+            // Seeding ItemTypes into the database
             modelBuilder.Entity<ItemType>().HasData(
                 new ItemType { Id = 1, Name = "Dairy", Description = "Perishable dairy products." },
                 new ItemType { Id = 2, Name = "Meat", Description = "Fresh meat products." },
@@ -118,7 +94,7 @@ namespace Althaus_Warehouse.DBContext
                 new ItemType { Id = 30, Name = "Footwear", Description = "Shoes and footwear." }
             );
 
-            // Seed some Items into the database with the new ItemType foreign key
+            // Seed some Items into the database with the new ItemType foreign key and DateCreated
             modelBuilder.Entity<Item>().HasData(
                 new Item
                 {
@@ -128,7 +104,8 @@ namespace Althaus_Warehouse.DBContext
                     Quantity = 50,
                     Price = 599.99,
                     CreatedById = 1,
-                    ItemTypeId = 24 
+                    ItemTypeId = 24,
+                    DateCreated = DateTime.Now // Store as DateTime
                 },
                 new Item
                 {
@@ -138,7 +115,8 @@ namespace Althaus_Warehouse.DBContext
                     Quantity = 60,
                     Price = 249.99,
                     CreatedById = 2,
-                    ItemTypeId = 8 
+                    ItemTypeId = 8,
+                    DateCreated = DateTime.Now
                 },
                 new Item
                 {
@@ -148,7 +126,8 @@ namespace Althaus_Warehouse.DBContext
                     Quantity = 200,
                     Price = 19.99,
                     CreatedById = 3,
-                    ItemTypeId = 11 
+                    ItemTypeId = 11,
+                    DateCreated = DateTime.Now
                 },
                 new Item
                 {
@@ -158,7 +137,8 @@ namespace Althaus_Warehouse.DBContext
                     Quantity = 150,
                     Price = 89.99,
                     CreatedById = 3,
-                    ItemTypeId = 11
+                    ItemTypeId = 11,
+                    DateCreated = DateTime.Now
                 },
                 new Item
                 {
@@ -168,7 +148,8 @@ namespace Althaus_Warehouse.DBContext
                     Quantity = 80,
                     Price = 1.99,
                     CreatedById = 1,
-                    ItemTypeId = 1 
+                    ItemTypeId = 1,
+                    DateCreated = DateTime.Now
                 },
                 new Item
                 {
@@ -178,7 +159,8 @@ namespace Althaus_Warehouse.DBContext
                     Quantity = 100,
                     Price = 5.99,
                     CreatedById = 2,
-                    ItemTypeId = 2
+                    ItemTypeId = 2,
+                    DateCreated = DateTime.Now
                 },
                 new Item
                 {
@@ -188,7 +170,8 @@ namespace Althaus_Warehouse.DBContext
                     Quantity = 30,
                     Price = 799.99,
                     CreatedById = 1,
-                    ItemTypeId = 7 
+                    ItemTypeId = 7,
+                    DateCreated = DateTime.Now
                 },
                 new Item
                 {
@@ -198,7 +181,8 @@ namespace Althaus_Warehouse.DBContext
                     Quantity = 50,
                     Price = 59.99,
                     CreatedById = 3,
-                    ItemTypeId = 30 
+                    ItemTypeId = 30,
+                    DateCreated = DateTime.Now
                 },
                 new Item
                 {
@@ -208,7 +192,8 @@ namespace Althaus_Warehouse.DBContext
                     Quantity = 40,
                     Price = 129.99,
                     CreatedById = 2,
-                    ItemTypeId = 11 
+                    ItemTypeId = 11,
+                    DateCreated = DateTime.Now
                 },
                 new Item
                 {
@@ -218,7 +203,8 @@ namespace Althaus_Warehouse.DBContext
                     Quantity = 100,
                     Price = 39.99,
                     CreatedById = 1,
-                    ItemTypeId = 12 
+                    ItemTypeId = 12,
+                    DateCreated = DateTime.Now
                 }
             );
         }

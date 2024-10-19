@@ -4,8 +4,7 @@ using Althaus_Warehouse.Services.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Logging;
 
 namespace MyWarehouse.API.Controllers
 {
@@ -15,17 +14,18 @@ namespace MyWarehouse.API.Controllers
     [Route("api/v{version:apiVersion}/items")]
     [Asp.Versioning.ApiVersion(1.0)]
     [ApiController]
-    //[Authorize]
-    public class ItemsController : ControllerBase
+    public class ItemController : ControllerBase
     {
-        private readonly ILogger<ItemsController> _logger;
+        private readonly ILogger _logger;
         private readonly IItemRepository _itemRepository;
+        private readonly IItemTypeRepository _itemTypeRepository;
         private readonly IMapper _mapper;
 
-        public ItemsController(ILogger<ItemsController> logger, IItemRepository itemRepository, IMapper mapper)
+        public ItemController(ILogger<ItemController> logger, IItemRepository itemRepository, IMapper mapper, IItemTypeRepository itemTypeRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository));
+            _itemTypeRepository = itemTypeRepository ?? throw new ArgumentNullException(nameof(itemTypeRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -38,8 +38,23 @@ namespace MyWarehouse.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<GetItemDTO>>> GetItems()
         {
-            var items = await _itemRepository.GetAllItemsAsync();
-            return Ok(_mapper.Map<IEnumerable<GetItemDTO>>(items));
+            try
+            {
+                var items = await _itemRepository.GetAllItemsAsync();
+                var itemDtos = _mapper.Map<IEnumerable<GetItemDTO>>(items);
+
+                foreach (var item in itemDtos)
+                {
+                    item.InStock = item.Quantity > 0;
+                }
+
+                return Ok(itemDtos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving all items.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
 
         /// <summary>
@@ -54,12 +69,25 @@ namespace MyWarehouse.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GetItemDTO>> GetItem(int id)
         {
-            var item = await _itemRepository.GetItemByIdAsync(id);
-            if (item == null)
+            try
             {
-                return NotFound();
+                var item = await _itemRepository.GetItemByIdAsync(id);
+                if (item == null)
+                {
+                    _logger.LogWarning("Item with ID {Id} not found.", id);
+                    return NotFound($"Item with ID {id} was not found.");
+                }
+
+                var itemDto = _mapper.Map<GetItemDTO>(item);
+                itemDto.InStock = item.Quantity > 0;
+
+                return Ok(itemDto);
             }
-            return Ok(_mapper.Map<GetItemDTO>(item));
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving item with ID {Id}.", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
 
         /// <summary>
@@ -70,15 +98,31 @@ namespace MyWarehouse.API.Controllers
         /// <response code="201">If the item was created successfully.</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<GetItemDTO>> CreateItem([FromBody] CreateItemDTO item)
         {
-            var newItem = _mapper.Map<Item>(item);
-            await _itemRepository.AddItemAsync(newItem);
-            await _itemRepository.SaveChangesAsync();
+            if (item == null)
+            {
+                return BadRequest("Item data is null.");
+            }
 
-            var createdItem = _mapper.Map<GetItemDTO>(newItem);
+            try
+            {
+                var newItem = _mapper.Map<Item>(item);
+                await _itemRepository.AddItemAsync(newItem);
+                await _itemRepository.SaveChangesAsync();
 
-            return CreatedAtRoute("GetItem", new { id = createdItem.Id }, createdItem);
+                var createdItem = _mapper.Map<GetItemDTO>(newItem);
+                createdItem.InStock = newItem.Quantity > 0;
+
+                _logger.LogInformation("Item with ID {Id} created successfully.", createdItem.Id);
+                return CreatedAtRoute("GetItem", new { id = createdItem.Id }, createdItem);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating a new item.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
 
         /// <summary>
@@ -91,18 +135,34 @@ namespace MyWarehouse.API.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> UpdateItem(int id, [FromBody] UpdateItemDTO itemBeingUpdated)
         {
-            var itemEntity = await _itemRepository.GetItemByIdAsync(id);
-            if (itemEntity == null)
+            if (itemBeingUpdated == null)
             {
-                return NotFound();
+                return BadRequest("Item data is null.");
             }
 
-            _mapper.Map(itemBeingUpdated, itemEntity);
-            await _itemRepository.SaveChangesAsync();
+            try
+            {
+                var itemEntity = await _itemRepository.GetItemByIdAsync(id);
+                if (itemEntity == null)
+                {
+                    _logger.LogWarning("Item with ID {Id} not found for update.", id);
+                    return NotFound($"Item with ID {id} was not found.");
+                }
 
-            return NoContent();
+                _mapper.Map(itemBeingUpdated, itemEntity);
+                await _itemRepository.SaveChangesAsync();
+
+                _logger.LogInformation("Item with ID {Id} updated successfully.", id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating item with ID {Id}.", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
 
         /// <summary>
@@ -119,73 +179,81 @@ namespace MyWarehouse.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> PartiallyUpdateItem(int id, [FromBody] JsonPatchDocument<UpdateItemDTO> patchDocument)
         {
-            var itemEntity = await _itemRepository.GetItemByIdAsync(id);
-            if (itemEntity == null)
+            if (patchDocument == null)
             {
-                return NotFound();
+                return BadRequest("Patch document is null.");
             }
 
-            var itemToPatch = _mapper.Map<UpdateItemDTO>(itemEntity);
-            patchDocument.ApplyTo(itemToPatch, ModelState);
-
-            if (!ModelState.IsValid || !TryValidateModel(itemToPatch))
+            try
             {
-                return BadRequest(ModelState);
+                var itemEntity = await _itemRepository.GetItemByIdAsync(id);
+                if (itemEntity == null)
+                {
+                    _logger.LogWarning("Item with ID {Id} not found for partial update.", id);
+                    return NotFound($"Item with ID {id} was not found.");
+                }
+
+                var itemToPatch = _mapper.Map<UpdateItemDTO>(itemEntity);
+                patchDocument.ApplyTo(itemToPatch, ModelState);
+
+                if (!ModelState.IsValid || !TryValidateModel(itemToPatch))
+                {
+                    return BadRequest(ModelState);
+                }
+
+                _mapper.Map(itemToPatch, itemEntity);
+                await _itemRepository.SaveChangesAsync();
+
+                _logger.LogInformation("Item with ID {Id} partially updated successfully.", id);
+                return NoContent();
             }
-
-            _mapper.Map(itemToPatch, itemEntity);
-            await _itemRepository.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error partially updating item with ID {Id}.", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
 
         /// <summary>
-        /// Retrieves a list of items based on the specified category type.
+        /// Retrieves items by their category.
+        /// Can retrieve items by item type ID or category name.
         /// </summary>
-        /// <param name="itemType">The category of items to retrieve. This should be a valid <see cref="ItemType"/> enum value.</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation. The task result contains an <see cref="ActionResult{IEnumerable{GetItemDTO}}"/> 
-        /// which can be:
-        /// <list type="bullet">
-        ///     <item>
-        ///         <description>A 200 OK response containing a list of <see cref="GetItemDTO"/> if items are found.</description>
-        ///     </item>
-        ///     <item>
-        ///         <description>A 400 Bad Request response if the provided item type is invalid.</description>
-        ///     </item>
-        ///     <item>
-        ///         <description>A 404 Not Found response if no items are found for the specified category.</description>
-        ///     </item>
-        /// </list>
-        /// </returns>
-        /// <remarks>
-        /// Example request: GET /api/items/category?itemType=Electronics
-        /// </remarks>
+        /// <param name="itemType">The ID of the item type/category.</param>
+        /// <param name="categoryName">The name of the category.</param>
+        /// <returns>A list of items as <see cref="GetItemDTO"/>.</returns>
+        /// <response code="200">Returns the list of items for the specified category.</response>
+        /// <response code="400">If the item type ID is invalid or both parameters are missing.</response>
+        /// <response code="404">If no items are found for the category.</response>
         [HttpGet("category")]
-        public async Task<ActionResult<IEnumerable<GetItemDTO>>> GetItemsByCategory([FromQuery] ItemType itemType)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<GetItemDTO>>> GetItemsByCategory([FromQuery] int? itemTypeId = null, [FromQuery] string categoryName = null)
         {
-            // Validate that the itemType is a valid enum value
-            if (!Enum.IsDefined(typeof(ItemType), itemType))
+            // Check if at least one parameter is provided
+            if (!itemTypeId.HasValue && string.IsNullOrWhiteSpace(categoryName))
             {
-                return BadRequest("Invalid item type provided.");
+                return BadRequest("Please provide either an itemTypeId or a categoryName.");
             }
 
-            // Retrieve the items by category
-            var items = await _itemRepository.GetItemsByCategoryAsync(itemType);
+            // Retrieve items using the repository method
+            var items = await _itemRepository.GetItemsByCategoryAsync(itemTypeId, categoryName);
 
             // Check if any items were found
             if (items == null || !items.Any())
             {
-                return NotFound($"No items found for the category: {itemType}");
+                return NotFound("No items found for the provided criteria.");
             }
 
             // Map the items to DTOs
             var itemDTOs = _mapper.Map<IEnumerable<GetItemDTO>>(items);
+            foreach (var item in itemDTOs)
+            {
+                item.InStock = item.Quantity > 0; // Assuming Quantity is a property of Item
+            }
 
             return Ok(itemDTOs);
         }
-
-
 
 
 
@@ -200,16 +268,26 @@ namespace MyWarehouse.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeleteItem(int id)
         {
-            var itemEntity = await _itemRepository.GetItemByIdAsync(id);
-            if (itemEntity == null)
+            try
             {
-                return NotFound();
+                var itemEntity = await _itemRepository.GetItemByIdAsync(id);
+                if (itemEntity == null)
+                {
+                    _logger.LogWarning("Item with ID {Id} not found for deletion.", id);
+                    return NotFound($"Item with ID {id} was not found.");
+                }
+
+                await _itemRepository.DeleteItemAsync(id);
+                await _itemRepository.SaveChangesAsync();
+
+                _logger.LogInformation("Item with ID {Id} deleted successfully.", id);
+                return NoContent();
             }
-
-            await _itemRepository.DeleteItemAsync(itemEntity.Id);
-            await _itemRepository.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting item with ID {Id}.", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
     }
 }

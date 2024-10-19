@@ -1,6 +1,9 @@
 ﻿using Althaus_Warehouse.DBContext;
 using Althaus_Warehouse.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Althaus_Warehouse.Services.Repositories
 {
@@ -16,29 +19,52 @@ namespace Althaus_Warehouse.Services.Repositories
         /// Initializes a new instance of the <see cref="ItemRepository"/> class.
         /// </summary>
         /// <param name="context">The database context to use.</param>
-        public ItemRepository(WarehouseDbContext context) => _context = context ?? throw new ArgumentNullException(nameof(context));
+        public ItemRepository(WarehouseDbContext context) =>
+            _context = context ?? throw new ArgumentNullException(nameof(context));
 
         /// <inheritdoc/>
         public async Task<IEnumerable<Item>> GetAllItemsAsync() =>
             // Retrieve all items from the database
             await _context.Items.ToListAsync();
-        public async Task<IEnumerable<Item>> GetItemsByCategoryAsync(ItemType value) =>
-            await _context.Items
-                .Where(item => item.ItemType == value) // Filter items by the specified ItemType
-                .ToListAsync(); // Execute the query and return the results as a list
+
+        public async Task<IEnumerable<Item>> GetItemsByCategoryAsync(int? itemTypeId = null, string categoryName = null)
+        {
+            // Build the query
+            var query = _context.Items.AsQueryable();
+
+            if (itemTypeId.HasValue)
+            {
+                query = query.Where(item => item.ItemTypeId == itemTypeId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(categoryName))
+            {
+                query = query.Include(i => i.ItemType)
+                             .Where(i => i.ItemType.Name.Equals(categoryName, StringComparison.OrdinalIgnoreCase));
+            }
+
+            return await query.ToListAsync();
+        }
 
 
         /// <inheritdoc/>
-        public async Task<Item> GetItemByIdAsync(int id) =>
-            // Retrieve a specific item by its ID
-            await _context.Items.FindAsync(id);
+        public async Task<Item> GetItemByIdAsync(int id)
+        {
+            return await _context.Items
+                .Include(i => i.ItemType)  // Ensure ItemType is included in the query
+                .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
 
         /// <inheritdoc/>
         public async Task AddItemAsync(Item item)
         {
-            // Add a new item to the database
+            // Ensure DateCreated is set when adding the item
+            item.DateCreated = DateTime.UtcNow;
             await _context.Items.AddAsync(item);
         }
+
+
 
         /// <inheritdoc/>
         public async Task UpdateItemAsync(Item item)
@@ -57,6 +83,8 @@ namespace Althaus_Warehouse.Services.Repositories
                 _context.Items.Remove(item);
             }
         }
+
+        
 
         /// <inheritdoc/>
         public async Task<bool> ItemExistsAsync(int id) =>
