@@ -48,6 +48,37 @@ namespace Althaus_Warehouse.Controllers
         }
 
         /// <summary>
+        /// Retrieves an employee by their ID.
+        /// </summary>
+        /// <param name="id">The ID of the employee to retrieve.</param>
+        /// <returns>The employee as <see cref="EmployeeDTO"/> if found, or a 404 status if not found.</returns>
+        /// <response code="200">Returns the employee if found.</response>
+        /// <response code="404">Returns Not Found if the employee doesn't exist.</response>
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<EmployeeDTO>> GetEmployeeById(int id)
+        {
+            try
+            {
+                var employeeEntity = await _employeeRepository.GetEmployeeByIdAsync(id);
+                if (employeeEntity == null)
+                {
+                    _logger.LogWarning("Employee with ID {Id} not found.", id);
+                    return NotFound($"Employee with ID {id} was not found.");
+                }
+
+                var employeeDTO = _mapper.Map<EmployeeDTO>(employeeEntity);
+                return Ok(employeeDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving employee with ID {Id}.", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
+
+        /// <summary>
         /// Creates a new employee in the warehouse.
         /// </summary>
         /// <param name="createEmployeeDTO">The employee data to create.</param>
@@ -71,7 +102,7 @@ namespace Althaus_Warehouse.Controllers
 
                 var createdEmployee = _mapper.Map<EmployeeDTO>(employee);
                 _logger.LogInformation("Employee with ID {Id} created successfully.", createdEmployee.Id);
-                return CreatedAtAction(nameof(GetAllEmployees), new { id = createdEmployee.Id }, createdEmployee);
+                return CreatedAtAction(nameof(GetEmployeeById), new { id = createdEmployee.Id }, createdEmployee);
             }
             catch (Exception ex)
             {
