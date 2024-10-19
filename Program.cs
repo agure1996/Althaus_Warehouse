@@ -1,11 +1,7 @@
 using Althaus_Warehouse.DBContext;
-using Althaus_Warehouse.MappingProfiles;
-using Althaus_Warehouse.Mappings;
-using Althaus_Warehouse.Models.Entities;
 using Althaus_Warehouse.Services.Repositories;
 using Asp.Versioning;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace Althaus_Warehouse

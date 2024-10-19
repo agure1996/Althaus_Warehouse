@@ -37,5 +37,18 @@ namespace Althaus_Warehouse.Services.Repositories
         /// </summary>
         /// <param name="id">The unique identifier of the employee to delete.</param>
         Task DeleteEmployeeAsync(int id);
+
+        /// <summary>
+        /// Checks if an employee exists in the warehouse.
+        /// </summary>
+        /// <param name="id">The unique identifier of the employee.</param>
+        /// <returns>True if the employee exists; otherwise, false.</returns>
+        Task<bool> EmployeeExistsAsync(int id);
+
+        /// <summary>
+        /// Saves changes made to the database asynchronously.
+        /// </summary>
+        /// <returns>True if the save operation succeeded; otherwise, false.</returns>
+        Task<bool> SaveChangesAsync();
     }
 }
