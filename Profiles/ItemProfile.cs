@@ -24,13 +24,17 @@ public class ItemProfile : Profile
             .ForMember(dest => dest.ItemType, opt => opt.Ignore()) // Ignore ItemType for now
             .AfterMap((src, dest) =>
             {
-                // Manually set the ItemType based on ItemTypeId
-                if (src.ItemTypeId != 0) // Assuming 0 means no type selected
+                if (src.ItemTypeId != 0)
                 {
                     dest.ItemTypeId = src.ItemTypeId; // Set ItemTypeId
-                    // Optionally set the ItemType navigation property if you have a way to retrieve it
-                    // dest.ItemType = new ItemType { Id = src.ItemTypeId }; // Assuming ItemTypeId is sufficient
                 }
             });
+
+        // Mapping from UpdateItemDTO to Item
+        CreateMap<UpdateItemDTO, Item>()
+            .ForMember(dest => dest.CreatedById, opt => opt.Ignore()) // Ignore if not updating
+            .ForMember(dest => dest.DateCreated, opt => opt.Ignore()) // Ignore if not updating
+            .ForMember(dest => dest.ItemType, opt => opt.Ignore()) // Ignore the entire ItemType
+            .ForMember(dest => dest.ItemTypeId, opt => opt.MapFrom(src => src.ItemTypeId)); // Directly map ItemTypeId
     }
 }

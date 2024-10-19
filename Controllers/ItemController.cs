@@ -4,6 +4,7 @@ using Althaus_Warehouse.Services.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MyWarehouse.API.Controllers
@@ -162,7 +163,13 @@ namespace MyWarehouse.API.Controllers
                     return NotFound($"Item with ID {id} was not found.");
                 }
 
-                _mapper.Map(itemBeingUpdated, itemEntity);
+                // Map properties from DTO to the existing entity
+                itemEntity.Name = itemBeingUpdated.Name;
+                itemEntity.Description = itemBeingUpdated.Description;
+                itemEntity.Quantity = itemBeingUpdated.Quantity;
+                itemEntity.Price = itemBeingUpdated.Price;
+                itemEntity.ItemTypeId = itemBeingUpdated.ItemTypeId; 
+
                 await _itemRepository.SaveChangesAsync();
 
                 _logger.LogInformation("Item with ID {Id} updated successfully.", id);
@@ -175,54 +182,10 @@ namespace MyWarehouse.API.Controllers
             }
         }
 
-        /// <summary>
-        /// Applies a partial update to an existing item in the warehouse.
-        /// </summary>
-        /// <param name="id">The ID of the item to update.</param>
-        /// <param name="patchDocument">The JSON Patch document with the update instructions as <see cref="JsonPatchDocument"/>.</param>
-        /// <response code="204">If the item was updated successfully.</response>
-        /// <response code="400">If the patch document is invalid.</response>
-        /// <response code="404">If the item is not found.</response>
-        [HttpPatch("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> PartiallyUpdateItem(int id, [FromBody] JsonPatchDocument<UpdateItemDTO> patchDocument)
-        {
-            if (patchDocument == null)
-            {
-                return BadRequest("Patch document is null.");
-            }
 
-            try
-            {
-                var itemEntity = await _itemRepository.GetItemByIdAsync(id);
-                if (itemEntity == null)
-                {
-                    _logger.LogWarning("Item with ID {Id} not found for partial update.", id);
-                    return NotFound($"Item with ID {id} was not found.");
-                }
 
-                var itemToPatch = _mapper.Map<UpdateItemDTO>(itemEntity);
-                patchDocument.ApplyTo(itemToPatch, ModelState);
 
-                if (!ModelState.IsValid || !TryValidateModel(itemToPatch))
-                {
-                    return BadRequest(ModelState);
-                }
 
-                _mapper.Map(itemToPatch, itemEntity);
-                await _itemRepository.SaveChangesAsync();
-
-                _logger.LogInformation("Item with ID {Id} partially updated successfully.", id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error partially updating item with ID {Id}.", id);
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
-            }
-        }
 
         /// <summary>
         /// Retrieves items by their category.

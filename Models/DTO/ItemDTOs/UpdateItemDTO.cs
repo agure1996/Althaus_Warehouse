@@ -1,5 +1,4 @@
-﻿using Althaus_Warehouse.Models.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Althaus_Warehouse.Models.DTO.ItemDTOs
 {
@@ -42,9 +41,9 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         public double Price { get; set; }
 
         /// <summary>
-        /// Gets or sets the type/category of the item.
+        /// Gets or sets the ID of the type/category of the item.
         /// </summary>
         [Required]
-        public ItemType ItemType { get; set; }
+        public int ItemTypeId { get; set; } // Only keep the ItemTypeId
     }
 }
