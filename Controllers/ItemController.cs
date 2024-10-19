@@ -236,6 +236,9 @@ namespace MyWarehouse.API.Controllers
                 return BadRequest("Please provide either an itemTypeId or a categoryName.");
             }
 
+            // Log the incoming parameters
+            _logger.LogInformation("Received request for GetItemsByCategory with itemTypeId: {itemTypeId}, categoryName: {categoryName}", itemTypeId, categoryName);
+
             // Retrieve items using the repository method
             var items = await _itemRepository.GetItemsByCategoryAsync(itemTypeId, categoryName);
 
@@ -254,6 +257,7 @@ namespace MyWarehouse.API.Controllers
 
             return Ok(itemDTOs);
         }
+
 
 
 

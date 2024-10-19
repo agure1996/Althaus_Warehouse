@@ -5,6 +5,7 @@ using Althaus_Warehouse.Models.Entities;
 using Althaus_Warehouse.Services.Repositories;
 using Asp.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace Althaus_Warehouse
@@ -36,6 +37,7 @@ namespace Althaus_Warehouse
             builder.Services.AddDbContext<WarehouseDbContext>(options =>
                 options.UseMySql(builder.Configuration["ConnectionStrings:WarehouseDbConnection"],
                 new MySqlServerVersion(new Version(8, 0, 23))));
+
 
             // Register the EmployeeRepository
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();

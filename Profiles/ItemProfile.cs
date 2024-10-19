@@ -5,18 +5,18 @@ using Althaus_Warehouse.Models.DTO.ItemDTOs;
 namespace Althaus_Warehouse.MappingProfiles
 {
     /// <summary>
-    /// Mapping profile for the Item entity and Item DTOs
+    /// Mapping profile for the Item entity and Item DTOs.
     /// </summary>
     public class ItemProfile : Profile
     {
         /// <summary>
-        /// Constructor to define the mappings between Entity and DTOs
+        /// Constructor to define the mappings between Entity and DTOs.
         /// </summary>
         public ItemProfile()
         {
             // Mapping from Item to GetItemDTO (read operations)
             CreateMap<Item, GetItemDTO>()
-                .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => src.DateCreated.Date)) // Assuming DateCreated is DateTime
+                .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.DateCreated))) // Convert DateTime to DateOnly
                 .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.ItemType != null ? src.ItemType : null))
                 .ForMember(dest => dest.InStock, opt => opt.MapFrom(src => src.Quantity > 0));
 
