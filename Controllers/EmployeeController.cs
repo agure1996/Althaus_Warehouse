@@ -3,6 +3,8 @@ using Althaus_Warehouse.Models.Entities;
 using Althaus_Warehouse.Services.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Althaus_Warehouse.Controllers
 {
@@ -97,6 +99,7 @@ namespace Althaus_Warehouse.Controllers
             try
             {
                 var employee = _mapper.Map<Employee>(createEmployeeDTO);
+
                 await _employeeRepository.AddEmployeeAsync(employee);
                 await _employeeRepository.SaveChangesAsync();
 

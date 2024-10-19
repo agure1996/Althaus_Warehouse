@@ -29,6 +29,11 @@ namespace Althaus_Warehouse.Models.Interfaces
         string Email { get; set; }
 
         /// <summary>
+        /// Hashed password of the employee (used for authentication)
+        /// </summary>
+        string PasswordHash { get; set; }
+
+        /// <summary>
         /// Role of the employee (e.g., Staff, Manager, Admin)
         /// </summary>
         EmployeeType EmployeeType { get; set; }

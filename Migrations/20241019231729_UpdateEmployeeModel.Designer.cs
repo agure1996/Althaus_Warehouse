@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Althaus_Warehouse.Migrations
 {
     [DbContext(typeof(WarehouseDbContext))]
-    [Migration("20241019012853_UpdateDb")]
-    partial class UpdateDb
+    [Migration("20241019231729_UpdateEmployeeModel")]
+    partial class UpdateEmployeeModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,6 +57,11 @@ namespace Althaus_Warehouse.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
@@ -70,7 +75,8 @@ namespace Althaus_Warehouse.Migrations
                             EmployeeType = 1,
                             FirstName = "Jimmy",
                             IsActive = true,
-                            LastName = "Jackson"
+                            LastName = "Jackson",
+                            PasswordHash = "$2a$11$kp9SPqZ/2yMQ.Q54pT.wBOWyC/C7Wib3sel1WCZ67Pbo1aei87PRy"
                         },
                         new
                         {
@@ -80,7 +86,8 @@ namespace Althaus_Warehouse.Migrations
                             EmployeeType = 2,
                             FirstName = "Jane",
                             IsActive = true,
-                            LastName = "Smith"
+                            LastName = "Smith",
+                            PasswordHash = "$2a$11$Sbtr0q6cEAbTx55gv674SOSsBoTaNiSN4IqjhzUH/YL1/7slo7G7u"
                         },
                         new
                         {
@@ -90,7 +97,8 @@ namespace Althaus_Warehouse.Migrations
                             EmployeeType = 3,
                             FirstName = "Emily",
                             IsActive = true,
-                            LastName = "Johnson"
+                            LastName = "Johnson",
+                            PasswordHash = "$2a$11$qaIOPqZLFZ0bYJY65BV88e2wAiFBQ/s4EF/OL16OK9cxSbgytMLMi"
                         },
                         new
                         {
@@ -100,7 +108,8 @@ namespace Althaus_Warehouse.Migrations
                             EmployeeType = 4,
                             FirstName = "Hamza",
                             IsActive = true,
-                            LastName = "Adam"
+                            LastName = "Adam",
+                            PasswordHash = "$2a$11$dtNpTK3h//WNUlx6wNAOG.Jw6pk8bbJsu.6Fg.NQ34PhcuNXs4EXG"
                         });
                 });
 
@@ -115,8 +124,8 @@ namespace Althaus_Warehouse.Migrations
                     b.Property<int?>("CreatedById")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("DateCreated")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -150,7 +159,7 @@ namespace Althaus_Warehouse.Migrations
                         {
                             Id = 1,
                             CreatedById = 1,
-                            DateCreated = new DateOnly(1, 1, 1),
+                            DateCreated = new DateTime(2024, 10, 20, 0, 17, 28, 797, DateTimeKind.Local).AddTicks(745),
                             Description = "15-inch laptop with 8GB RAM",
                             ItemTypeId = 24,
                             Name = "Laptop",
@@ -161,7 +170,7 @@ namespace Althaus_Warehouse.Migrations
                         {
                             Id = 2,
                             CreatedById = 2,
-                            DateCreated = new DateOnly(1, 1, 1),
+                            DateCreated = new DateTime(2024, 10, 20, 0, 17, 28, 797, DateTimeKind.Local).AddTicks(869),
                             Description = "Ergonomic office chair with lumbar support",
                             ItemTypeId = 8,
                             Name = "Office Chair",
@@ -172,7 +181,7 @@ namespace Althaus_Warehouse.Migrations
                         {
                             Id = 3,
                             CreatedById = 3,
-                            DateCreated = new DateOnly(1, 1, 1),
+                            DateCreated = new DateTime(2024, 10, 20, 0, 17, 28, 797, DateTimeKind.Local).AddTicks(884),
                             Description = "Wireless mouse",
                             ItemTypeId = 11,
                             Name = "Mouse",
@@ -183,7 +192,7 @@ namespace Althaus_Warehouse.Migrations
                         {
                             Id = 4,
                             CreatedById = 3,
-                            DateCreated = new DateOnly(1, 1, 1),
+                            DateCreated = new DateTime(2024, 10, 20, 0, 17, 28, 797, DateTimeKind.Local).AddTicks(911),
                             Description = "Mechanical keyboard with RGB lighting",
                             ItemTypeId = 11,
                             Name = "Keyboard",
@@ -194,7 +203,7 @@ namespace Althaus_Warehouse.Migrations
                         {
                             Id = 5,
                             CreatedById = 1,
-                            DateCreated = new DateOnly(1, 1, 1),
+                            DateCreated = new DateTime(2024, 10, 20, 0, 17, 28, 797, DateTimeKind.Local).AddTicks(918),
                             Description = "Fresh dairy milk",
                             ItemTypeId = 1,
                             Name = "Milk",
@@ -205,7 +214,7 @@ namespace Althaus_Warehouse.Migrations
                         {
                             Id = 6,
                             CreatedById = 2,
-                            DateCreated = new DateOnly(1, 1, 1),
+                            DateCreated = new DateTime(2024, 10, 20, 0, 17, 28, 797, DateTimeKind.Local).AddTicks(931),
                             Description = "Organic chicken breast",
                             ItemTypeId = 2,
                             Name = "Chicken Breast",
@@ -216,7 +225,7 @@ namespace Althaus_Warehouse.Migrations
                         {
                             Id = 7,
                             CreatedById = 1,
-                            DateCreated = new DateOnly(1, 1, 1),
+                            DateCreated = new DateTime(2024, 10, 20, 0, 17, 28, 797, DateTimeKind.Local).AddTicks(954),
                             Description = "5G smartphone with 128GB storage",
                             ItemTypeId = 7,
                             Name = "Smartphone",
@@ -227,7 +236,7 @@ namespace Althaus_Warehouse.Migrations
                         {
                             Id = 8,
                             CreatedById = 3,
-                            DateCreated = new DateOnly(1, 1, 1),
+                            DateCreated = new DateTime(2024, 10, 20, 0, 17, 28, 797, DateTimeKind.Local).AddTicks(961),
                             Description = "Lightweight running shoes",
                             ItemTypeId = 30,
                             Name = "Running Shoes",
@@ -238,7 +247,7 @@ namespace Althaus_Warehouse.Migrations
                         {
                             Id = 9,
                             CreatedById = 2,
-                            DateCreated = new DateOnly(1, 1, 1),
+                            DateCreated = new DateTime(2024, 10, 20, 0, 17, 28, 797, DateTimeKind.Local).AddTicks(969),
                             Description = "Wireless all-in-one printer",
                             ItemTypeId = 11,
                             Name = "Printer",
@@ -249,7 +258,7 @@ namespace Althaus_Warehouse.Migrations
                         {
                             Id = 10,
                             CreatedById = 1,
-                            DateCreated = new DateOnly(1, 1, 1),
+                            DateCreated = new DateTime(2024, 10, 20, 0, 17, 28, 797, DateTimeKind.Local).AddTicks(977),
                             Description = "A comprehensive guide to C# programming",
                             ItemTypeId = 12,
                             Name = "Book: C# Programming",

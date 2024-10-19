@@ -18,7 +18,14 @@ namespace Althaus_Warehouse.Services.Repositories
         /// </summary>
         /// <param name="id">The unique identifier of the employee.</param>
         /// <returns>The <see cref="Employee"/> object if found; otherwise, null.</returns>
-        Task<Employee?> GetEmployeeByIdAsync(int id); // Updated to return null if not found
+        Task<Employee?> GetEmployeeByIdAsync(int id);
+
+        /// <summary>
+        /// Retrieves an employee by email address for authentication purposes.
+        /// </summary>
+        /// <param name="email">The email address of the employee.</param>
+        /// <returns>The <see cref="Employee"/> object if found; otherwise, null.</returns>
+        Task<Employee?> GetEmployeeByEmailAsync(string email);
 
         /// <summary>
         /// Adds a new employee to the warehouse.
@@ -44,6 +51,14 @@ namespace Althaus_Warehouse.Services.Repositories
         /// <param name="id">The unique identifier of the employee.</param>
         /// <returns>True if the employee exists; otherwise, false.</returns>
         Task<bool> EmployeeExistsAsync(int id);
+
+        /// <summary>
+        /// Validates an employee's credentials for login.
+        /// </summary>
+        /// <param name="email">The employee's email.</param>
+        /// <param name="password">The provided password to validate.</param>
+        /// <returns>True if the password is valid; otherwise, false.</returns>
+        Task<bool> ValidateEmployeeCredentialsAsync(string email, string password);
 
         /// <summary>
         /// Saves changes made to the database asynchronously.

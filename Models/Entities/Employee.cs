@@ -1,4 +1,4 @@
-﻿using System;
+﻿using BCrypt.Net;
 using System.ComponentModel.DataAnnotations;
 
 namespace Althaus_Warehouse.Models.Entities
@@ -14,21 +14,24 @@ namespace Althaus_Warehouse.Models.Entities
         public Employee() { }
 
         /// <summary>
-        /// Constructor for creating an Employee with details
+        /// Constructor for creating an Employee with details and password
         /// </summary>
         /// <param name="id">Employee Id</param>
         /// <param name="firstName">First name of the employee</param>
         /// <param name="lastName">Last name of the employee</param>
         /// <param name="email">Employee email address</param>
+        /// <param name="rawPassword">Raw password for the employee</param>
         /// <param name="employeeType">Employee's type in the warehouse</param>
-        public Employee(int id, string firstName, string lastName, string email, EmployeeType employeeType)
+        public Employee(int id, string firstName, string lastName, string email, string rawPassword, EmployeeType employeeType)
         {
             Id = id;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(rawPassword); // Hash the password
             EmployeeType = employeeType;
             DateHired = DateTime.Today;
+            IsActive = true;
         }
 
         /// <summary>
@@ -60,7 +63,14 @@ namespace Althaus_Warehouse.Models.Entities
         public string Email { get; set; }
 
         /// <summary>
-        /// Gets or sets the employee's role current ones: (Manager, HR, Sales, Employee)
+        /// Stores the hashed password for the employee (used for authentication)
+        /// </summary>
+        [Required]
+        [MaxLength(500)] // Make sure it's large enough for hashed passwords
+        public string PasswordHash { get; set; }
+
+        /// <summary>
+        /// Gets or sets the employee's role (Manager, HR, Sales, Employee)
         /// </summary>
         [Required]
         public EmployeeType EmployeeType { get; set; }

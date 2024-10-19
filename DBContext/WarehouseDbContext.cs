@@ -26,7 +26,9 @@ namespace Althaus_Warehouse.DBContext
                     Email = "jim.jack@altwarehouse.com",
                     EmployeeType = EmployeeType.Manager,
                     DateHired = new DateTime(2020, 01, 15),
-                    IsActive = true
+                    IsActive = true,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Password123!"),
+
                 },
                 new Employee
                 {
@@ -36,7 +38,9 @@ namespace Althaus_Warehouse.DBContext
                     Email = "jane.smith@altwarehouse.com",
                     EmployeeType = EmployeeType.HR,
                     DateHired = new DateTime(2021, 05, 20),
-                    IsActive = true
+                    IsActive = true,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Password123!"),
+
                 },
                 new Employee
                 {
@@ -46,7 +50,9 @@ namespace Althaus_Warehouse.DBContext
                     Email = "emily.johnson@altwarehouse.com",
                     EmployeeType = EmployeeType.Sales,
                     DateHired = new DateTime(2022, 07, 25),
-                    IsActive = true
+                    IsActive = true,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Password123!"),
+
                 },
                 new Employee
                 {
@@ -56,7 +62,9 @@ namespace Althaus_Warehouse.DBContext
                     Email = "hamza.adam@altwarehouse.com",
                     EmployeeType = EmployeeType.Employee,
                     DateHired = new DateTime(2021, 11, 02),
-                    IsActive = true
+                    IsActive = true,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Password123!"),
+
                 }
             );
 
@@ -105,7 +113,7 @@ namespace Althaus_Warehouse.DBContext
                     Price = 599.99,
                     CreatedById = 1,
                     ItemTypeId = 24,
-                    DateCreated = DateTime.Now // Store as DateTime
+                    DateCreated = DateTime.Now
                 },
                 new Item
                 {
