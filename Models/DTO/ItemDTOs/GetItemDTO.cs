@@ -1,5 +1,6 @@
 ﻿using Althaus_Warehouse.Models.Entities; // Assuming ItemType is defined in Entities
 using System;
+using Althaus_Warehouse.Models.DTO;
 
 namespace Althaus_Warehouse.Models.DTO.ItemDTOs
 {
@@ -21,7 +22,7 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         /// <summary>
         /// Gets or sets a brief description of the item.
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// Gets or sets the current quantity of the item in stock.
@@ -41,7 +42,7 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         /// <summary>
         /// Gets or sets the type/category of the item.
         /// </summary>
-        public ItemType ItemType { get; set; }
+        public ItemTypeDTO? ItemType { get; set; } 
 
         /// <summary>
         /// Gets or sets stock status of item.

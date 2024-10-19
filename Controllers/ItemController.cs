@@ -108,7 +108,16 @@ namespace MyWarehouse.API.Controllers
 
             try
             {
+                // Map the CreateItemDTO to the Item entity
                 var newItem = _mapper.Map<Item>(item);
+
+                // Optionally, set the ItemType property based on the ItemTypeId
+                if (item.ItemTypeId > 0) // Assuming ItemTypeId must be a positive number
+                {
+                    var itemType = await _itemTypeRepository.GetItemTypeByIdAsync(item.ItemTypeId);
+                    newItem.ItemType = itemType; // Assign the fetched ItemType entity
+                }
+
                 await _itemRepository.AddItemAsync(newItem);
                 await _itemRepository.SaveChangesAsync();
 
@@ -124,6 +133,7 @@ namespace MyWarehouse.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
             }
         }
+
 
         /// <summary>
         /// Updates an existing item in the warehouse.

@@ -10,29 +10,29 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         /// <summary>
         /// Gets or sets the name of the item.
         /// </summary>
-        [Required]
-        [MaxLength(50)]
-        public string Name { get; set; } 
+        [Required(ErrorMessage = "Item name is required.")]
+        [MaxLength(50, ErrorMessage = "Item name cannot exceed 50 characters.")]
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets a brief description of the item.
         /// </summary>
-        [MaxLength(200)]
-        public string? Description { get; set; } 
+        [MaxLength(200, ErrorMessage = "Description cannot exceed 200 characters.")]
+        public string? Description { get; set; }
 
         /// <summary>
         /// Gets or sets the current quantity of the item in stock.
         /// </summary>
-        [Required]
-        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be a positive number.")]
+        [Required(ErrorMessage = "Quantity is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be a non-negative number.")]
         public int Quantity { get; set; }
 
         /// <summary>
         /// Gets or sets the price of the item.
         /// </summary>
-        [Required]
-        [Range(0.0, double.MaxValue, ErrorMessage = "Price must be a positive number.")]
-        public double Price { get; set; }
+        [Required(ErrorMessage = "Price is required.")]
+        [Range(0.0, double.MaxValue, ErrorMessage = "Price must be a non-negative number.")]
+        public decimal Price { get; set; }  // Changed from double to decimal
 
         /// <summary>
         /// Gets or sets the ID of the employee who created the item.
@@ -43,7 +43,7 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         /// <summary>
         /// Gets or sets the foreign key of the type/category of the item.
         /// </summary>
-        [Required]
-        public int ItemTypeId { get; set; }  
+        [Required(ErrorMessage = "Item Type ID is required.")]
+        public int ItemTypeId { get; set; }
     }
 }
