@@ -10,6 +10,7 @@ namespace Althaus_Warehouse.Services.Repositories
     /// </summary>
     public class ItemTypeRepository : IItemTypeRepository
     {
+#pragma warning disable CS8603 // Possible null reference return.
         private readonly WarehouseDbContext _context;
         private readonly ILogger<ItemTypeRepository> _logger;
 
@@ -60,7 +61,9 @@ namespace Althaus_Warehouse.Services.Repositories
         /// <returns>A task that represents the asynchronous operation, containing the item type or null if not found.</returns>
         public async Task<ItemType> GetItemTypeByNameAsync(string name)
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             return await _context.ItemTypes.FirstOrDefaultAsync(it => it.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
         /// <summary>

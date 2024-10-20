@@ -17,7 +17,7 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         /// <summary>
         /// Gets or sets the name of the item.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Gets or sets a brief description of the item.

@@ -45,14 +45,14 @@ namespace Althaus_Warehouse.Models.Entities
         /// </summary>
         [Required]
         [MaxLength(50)]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         /// <summary>
         /// Get or set the last name of the employee
         /// </summary>
         [Required]
         [MaxLength(50)]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         /// <summary>
         /// Get or set the email of the employee
@@ -60,14 +60,14 @@ namespace Althaus_Warehouse.Models.Entities
         [Required]
         [EmailAddress]
         [MaxLength(100)]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         /// <summary>
         /// Stores the hashed password for the employee (used for authentication)
         /// </summary>
         [Required]
         [MaxLength(500)] // Make sure it's large enough for hashed passwords
-        public string PasswordHash { get; set; }
+        public string? PasswordHash { get; set; }
 
         /// <summary>
         /// Gets or sets the employee's role (Manager, HR, Sales, Employee)

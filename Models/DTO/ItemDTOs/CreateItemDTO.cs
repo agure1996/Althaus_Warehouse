@@ -12,7 +12,7 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         /// </summary>
         [Required(ErrorMessage = "Item name is required.")]
         [MaxLength(50, ErrorMessage = "Item name cannot exceed 50 characters.")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Gets or sets a brief description of the item.

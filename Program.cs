@@ -29,8 +29,6 @@ namespace Althaus_Warehouse
             // Use Serilog for logging
             builder.Host.UseSerilog();
 
-            // Add services to the container
-            builder.Services.AddControllersWithViews();
 
             // Add Problem Details service for standardized error responses
             builder.Services.AddProblemDetails();
@@ -69,13 +67,6 @@ namespace Althaus_Warehouse
                 options.DefaultApiVersion = new ApiVersion(1, 0);
             });
 
-            //adding authorisation
-            builder.Services.AddAuthorization(options =>
-            {
-                options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-            });
-
-
             // Configure JWT Authentication
             builder.Services.AddAuthentication(options =>
             {
@@ -84,6 +75,7 @@ namespace Althaus_Warehouse
             })
             .AddJwtBearer(options =>
             {
+#pragma warning disable CS8604 // Possible null reference argument.
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -94,7 +86,17 @@ namespace Althaus_Warehouse
                     ValidAudience = builder.Configuration["Authentication:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:SecretKey"]))
                 };
+#pragma warning restore CS8604 // Possible null reference argument.
             });
+
+            //adding authorisation
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Manager"));
+            });
+
+            // Add services to the container
+            builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 
@@ -107,10 +109,10 @@ namespace Althaus_Warehouse
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.MapControllerRoute(
                 name: "default",

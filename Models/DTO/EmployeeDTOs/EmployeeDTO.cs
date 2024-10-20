@@ -6,11 +6,11 @@
     public class EmployeeDTO
     {
         public int Id { get; set; }
-        public string Name { get; set; } // Ensure this property exists
+        public string? Name { get; set; } // Ensure this property exists
         public DateTime HireDate { get; set; }
-        public string Role { get; set; } // This property will hold the string representation of EmployeeType
+        public string? Role { get; set; } // This property will hold the string representation of EmployeeType
         public bool IsActive { get; set; }
-        public string Email { get; set; }
+        public string? Email { get; set; }
     }
 
 }

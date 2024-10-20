@@ -13,14 +13,14 @@ namespace Althaus_Warehouse.Models.DTO.EmployeeDTOs
         /// </summary>
         [Required]
         [MaxLength(50)]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         /// <summary>
         /// Last name of the employee
         /// </summary>
         [Required]
         [MaxLength(50)]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         /// <summary>
         /// Role of the employee (e.g., Staff, Manager, Admin)
@@ -39,7 +39,7 @@ namespace Althaus_Warehouse.Models.DTO.EmployeeDTOs
         [Required]
         [EmailAddress]
         [MaxLength(100)]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         /// <summary>
         /// Optional plain text password for updating the employee's password

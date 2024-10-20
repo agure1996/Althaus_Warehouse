@@ -20,12 +20,12 @@ namespace Althaus_Warehouse.Models.Entities
         /// </summary>
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Optional: A brief description of the item type/category.
         /// </summary>
         [MaxLength(200)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 }

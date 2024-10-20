@@ -13,7 +13,7 @@
         /// <summary>
         /// Gets or sets the name of the item.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Gets or sets the current quantity of the item in stock.

@@ -1,9 +1,12 @@
-﻿namespace Althaus_Warehouse.Services.AuthService
+﻿using Althaus_Warehouse.Models.DTO.EmployeeDTOs;
+
+namespace Althaus_Warehouse.Services.AuthService
 {
     public interface IAuthService
     {
         string GenerateToken(string userName, string role);
-        bool ValidateUser(string userName, string password);
-    }
 
+        // Updated this method to be asynchronous and return a tuple
+        Task<(bool isValid, EmployeeDTO employeeDto)> ValidateUser(string email, string password);
+    }
 }
