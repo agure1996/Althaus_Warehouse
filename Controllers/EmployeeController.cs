@@ -2,6 +2,7 @@
 using Althaus_Warehouse.Models.Entities;
 using Althaus_Warehouse.Services.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Text;
@@ -12,6 +13,7 @@ namespace Althaus_Warehouse.Controllers
     /// Controller to manage operations related to employees in the warehouse.
     /// </summary>
     [Route("api/v{version:apiVersion}/employees")]
+    [Authorize(Roles = "Admin")]
     [Asp.Versioning.ApiVersion(1.0)]
     [ApiController]
     public class EmployeeController : ControllerBase

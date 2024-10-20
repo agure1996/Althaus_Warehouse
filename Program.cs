@@ -1,4 +1,6 @@
 using Althaus_Warehouse.DBContext;
+using Althaus_Warehouse.Services;
+using Althaus_Warehouse.Services.AuthService;
 using Althaus_Warehouse.Services.Repositories;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -48,8 +50,16 @@ namespace Althaus_Warehouse
             // Register the ItemTypeRepository
             builder.Services.AddScoped<IItemTypeRepository, ItemTypeRepository>();
 
+            // Register IEmployeeService
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
             // Add AutoMapper for object mapping
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            //adding authentication services
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
+
 
             // Add API versioning
             builder.Services.AddApiVersioning(options =>
@@ -59,7 +69,12 @@ namespace Althaus_Warehouse
                 options.DefaultApiVersion = new ApiVersion(1, 0);
             });
 
-            //adding authentication
+            //adding authorisation
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+            });
+
 
             // Configure JWT Authentication
             builder.Services.AddAuthentication(options =>
@@ -77,7 +92,7 @@ namespace Althaus_Warehouse
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = builder.Configuration["Authentication:Issuer"],
                     ValidAudience = builder.Configuration["Authentication:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:SecretKey"])) // Ensure this is a byte array
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:SecretKey"]))
                 };
             });
 
@@ -94,7 +109,7 @@ namespace Althaus_Warehouse
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
