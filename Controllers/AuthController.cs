@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Althaus_Warehouse.Models.DTO.EmployeeDTOs; // Adjust the namespace as necessary
 using Althaus_Warehouse.Services.AuthService;
 using Althaus_Warehouse.Models.DTO;
-using Althaus_Warehouse.Models.Entities; // Ensure this namespace is included
+using Althaus_Warehouse.Models.Entities;
 
 namespace Althaus_Warehouse.Controllers
 {
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
     [Asp.Versioning.ApiVersion(1.0)]
-    public class AuthController : ControllerBase
+    public class AuthController : Controller
     {
         private readonly IAuthService _authService;
 
@@ -19,14 +18,24 @@ namespace Althaus_Warehouse.Controllers
             _authService = authService;
         }
 
+        // GET: /Auth/login
+        [HttpGet("login")]
+        [AllowAnonymous]
+        public IActionResult GetLoginView()
+        {
+            // Return the login view
+            return View("Index"); // Ensure this matches the name of your Razor view file
+        }
+
+        // API method for login
         [HttpPost("login")]
-        [AllowAnonymous] // Allow access without authentication
-        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromForm] LoginDto loginDto)
         {
             // Validate input
             if (loginDto == null || string.IsNullOrWhiteSpace(loginDto.Email) || string.IsNullOrWhiteSpace(loginDto.Password))
             {
-                return BadRequest("Email and password are required.");
+                return BadRequest(new { message = "Email and password are required." });
             }
 
             // Validate user credentials
@@ -34,23 +43,19 @@ namespace Althaus_Warehouse.Controllers
 
             if (!isValid)
             {
-                return Unauthorized("Invalid credentials.");
+                return Unauthorized(new { message = "Invalid credentials." });
             }
 
-            // Check if the employee is a Manager , HR , Sales
-            if (employeeDto.Role != EmployeeType.Employee.ToString() || employeeDto.Role == EmployeeType.HR.ToString() || employeeDto.Role == EmployeeType.Sales.ToString())
+            // Check role and return token
+            if (employeeDto.Role == EmployeeType.Manager.ToString() ||
+                employeeDto.Role == EmployeeType.HR.ToString() ||
+                employeeDto.Role == EmployeeType.Sales.ToString())
             {
-                // Generate token if the employee is a Manager
-#pragma warning disable CS8604 // Possible null reference argument.
                 string token = _authService.GenerateToken(loginDto.Email, employeeDto.Role);
-#pragma warning restore CS8604 // Possible null reference argument.
                 return Ok(new { Token = token, Employee = employeeDto });
             }
-            else
-            {
-                // Instead of Forbid, return Unauthorized with a message
-                return Unauthorized("You do not have access.");
-            }
+
+            return Unauthorized(new { message = "You do not have access." });
         }
     }
 }

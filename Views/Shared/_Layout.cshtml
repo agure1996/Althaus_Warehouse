@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - Althaus Warehouse</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/custom-styles.css" asp-append-version="true" /> <!-- custom CSS file when I make it -->
+    <link rel="stylesheet" href="~/css/custom-styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
@@ -18,13 +18,16 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1" id="nav-items">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Test" asp-action="Index">Test</a>
                         </li>
+
+
+                        <!-- The dynamic items will be inserted here -->
                     </ul>
                 </div>
             </div>
@@ -46,6 +49,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false) <!-- Placeholder for additional scripts -->
+    <script src="~/js/auth.js" asp-append-version="true"></script>
+    <script src="~/js/navbar.js" asp-append-version="true"></script> <!-- Include your new JS file -->
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

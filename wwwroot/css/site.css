@@ -11,6 +11,14 @@ header {
     color: white;
 }
 
+.nav-link {
+    cursor: pointer; /* Ensures the cursor changes to a pointer */
+}
+
+a {
+    pointer-events: auto; /* Ensure it can be clicked */
+}
+
 .navbar-brand {
     font-weight: bold; /* Make the brand stand out */
 }
