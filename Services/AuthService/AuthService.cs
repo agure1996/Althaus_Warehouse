@@ -10,7 +10,7 @@ using Althaus_Warehouse.DBContext;
 public class AuthService : IAuthService
 {
     private readonly string? _secretKey;
-    private readonly WarehouseDbContext _context; 
+    private readonly WarehouseDbContext _context;
 
     public AuthService(IConfiguration configuration, WarehouseDbContext context)
     {
@@ -20,10 +20,10 @@ public class AuthService : IAuthService
 
     public string GenerateToken(string email, string role)
     {
-        var claims = new[]
+        var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, email),
-            new Claim(ClaimTypes.Role, role)
+            new Claim("name", email),
+            new Claim("Role", role)
         };
 
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -35,7 +35,7 @@ public class AuthService : IAuthService
             issuer: "http://localhost:5168/",
             audience: "althauswarehouse",
             claims: claims,
-            expires: DateTime.Now.AddHours(12),
+            expires: DateTime.Now.AddHours(1),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

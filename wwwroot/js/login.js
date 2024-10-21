@@ -1,70 +1,90 @@
-﻿"use strict"; // Enable strict mode
+﻿"use strict"; // Enable strict mode to catch common errors
 
-// Assign the async function to a constant
+/**
+ * handleLogin: Handles the login process, sends the form data to the server, 
+ * and processes the response (token storage, role extraction, navbar update, and redirects).
+ *
+ * @param {FormData} formData - The form data containing user login details (Email and Password).
+ * @returns {Promise<void>} - A promise that resolves when the login process completes.
+ */
 const handleLogin = async (formData) => {
     try {
+        // Make an asynchronous POST request to the login API endpoint
         const response = await fetch("/api/v1/Auth/login", {
             method: "POST",
             body: JSON.stringify({
-                Email: formData.get('Email'),
-                Password: formData.get('Password')
+                Email: formData.get('Email'), // Retrieve email from formData
+                Password: formData.get('Password') // Retrieve password from formData
             }),
             headers: {
-                'Content-Type': 'application/json', // Set the content type to JSON
-                'Accept': 'application/json'
+                'Content-Type': 'application/json', // Specify that the body is in JSON format
+                'Accept': 'application/json' // Expect a JSON response
             }
         });
 
-        // Check if the response is okay
+        // If the response status is not OK (not 200), throw an error with the message from the server
         if (!response.ok) {
             const errorResponse = await response.json();
-            throw new Error(errorResponse.message || "Login failed."); // Handle non-200 responses
+            throw new Error(errorResponse.message || "Login failed."); // Default message if server message is unavailable
         }
 
+        // Extract the JSON response
         const data = await response.json();
 
-        // Assuming the token is in the response data
+        // Check if the server returned a token
         if (data.token) {
-            localStorage.setItem('token', data.token); // Store the token
-            // console.log('Token stored:', data.token); // Log the stored token
-            const userRole = parseJwt(data.token).role; // Extract user role from token
-            // console.log('User Role:', userRole); // Log the user role
-            updateNavItems(userRole); // Update navbar after successful login
-            window.location.href = "/Home"; // Redirect to home page
+            localStorage.setItem('token', data.token); // Store the token in localStorage
+
+            // Parse JWT token to extract the user's role
+            const userRole = parseJwt(data.token).role;
+
+            // Update the navigation items based on the user's role
+            updateNavItems(userRole);
+
+            // Reload the current page to reflect the logged-in state
+            window.location.reload();
+
+            // Redirect to the home page
+            window.location.href = "/Home";
         } else {
-            alert("Login failed. Please check your credentials."); // Alert on login failure
+            // Show an alert if no token was returned, indicating login failure
+            alert("Login failed. Please check your credentials.");
         }
     } catch (error) {
+        // Log any errors that occur during the login process to the console for debugging
         console.error("Error during login:", error);
-        alert("An error occurred during login. Please try again later."); // Generic error handling
+
+        // Show a generic error message to the user
+        alert("An error occurred during login. Please try again later.");
     }
 };
 
-// Get the form element directly
-const form = document.getElementById('loginForm');
+/**
+ * Grabs the login form from the DOM and adds a 'submit' event listener to handle login logic.
+ * Ensures the form exists and performs basic validation before submitting.
+ */
+const form = document.getElementById('loginForm'); // Select the login form by its ID
 
-// Event listener for form submission
-if (form) { // Ensure the form exists before adding the event listener
+// Check if the form exists on the page
+if (form) {
     form.addEventListener("submit", async function (e) {
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault(); // Prevent the default form submission behavior
 
-        // Create a FormData object
+        // Create a FormData object from the form element
         const formData = new FormData(form);
 
-        // Basic validation
+        // Basic validation: Check if both email and password fields are filled
         if (!formData.get('Email') || !formData.get('Password')) {
-            alert("Email and password are required.");
-            return;
+            alert("Email and password are required."); // Show an alert if validation fails
+            return; // Exit the function if validation fails
         }
 
-        // Call the handleLogin function with the formData
+        // If validation passes, proceed with the login request
         await handleLogin(formData);
     });
 }
 
-// Function to parse JWT and extract user role
-const parseJwt = (token) => {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    return JSON.parse(window.atob(base64));
-};
+/**
+ * parseJwt function was removed from this file because it is now handled in the navbar.js
+ * to avoid duplication of logic across multiple scripts.
+ */
