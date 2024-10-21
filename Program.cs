@@ -118,20 +118,17 @@ namespace Althaus_Warehouse
             // Routing for controllers
             app.MapControllers(); // For API controllers
 
-            // Default route for MVC (Razor views)
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.MapControllerRoute(
+            name: "login",
+            pattern: "Auth/{controller=Login}/{action=Index}/{id?}");
+            app.MapControllerRoute(
                 name: "test",
                 pattern: "{controller=Test}/{action=Index}/{id?}");
 
-            // API route mapping for authentication
-            app.MapControllerRoute(
-                name: "api",
-                pattern: "api/v{version:apiVersion}/[controller]",
-                defaults: new { controller = "Auth", action = "Login" });
 
             app.Run();
         }

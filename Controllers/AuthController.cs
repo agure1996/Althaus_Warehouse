@@ -22,15 +22,17 @@ namespace Althaus_Warehouse.Controllers
         [HttpGet("login")]
         [AllowAnonymous]
         public IActionResult GetLoginView()
-        {
+        {   
+
             // Return the login view
-            return View("Index"); // Ensure this matches the name of your Razor view file
+            return View("~/Views/Login/Index.cshtml"); 
         }
+
 
         // API method for login
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromForm] LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto) // Keep FromForm for form submissions
         {
             // Validate input
             if (loginDto == null || string.IsNullOrWhiteSpace(loginDto.Email) || string.IsNullOrWhiteSpace(loginDto.Password))
@@ -57,5 +59,6 @@ namespace Althaus_Warehouse.Controllers
 
             return Unauthorized(new { message = "You do not have access." });
         }
+
     }
 }

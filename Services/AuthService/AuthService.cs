@@ -44,29 +44,37 @@ public class AuthService : IAuthService
     public async Task<(bool isValid, EmployeeDTO employeeDto)> ValidateUser(string email, string password)
     {
         // Fetch the employee from the database
-        var employee = await _context.Employees.FirstOrDefaultAsync(e => e.Email == email && e.IsActive);
+        var employee = await _context.Employees
+                                     .FirstOrDefaultAsync(e => e.Email == email && e.IsActive);
 
-        // Validate the employee's existence and password
-        if (employee == null || !BCrypt.Net.BCrypt.Verify(password, employee.PasswordHash))
+        if (employee == null)
         {
-#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
+            Console.WriteLine($"User with email {email} not found or is not active.");
             return (false, null); // Invalid credentials
-#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
+        }
+
+        // Check if the password is valid
+        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, employee.PasswordHash);
+        if (!isPasswordValid)
+        {
+            Console.WriteLine("Invalid password attempt.");
+            return (false, null); // Invalid credentials
         }
 
         // Map the employee to EmployeeDTO
         var employeeDto = new EmployeeDTO
         {
             Id = employee.Id,
-            Name = employee.GetFullName(), // Using your existing method
+            Name = employee.GetFullName(),
             HireDate = employee.DateHired,
-            Role = employee.EmployeeType.ToString(), // Assuming EmployeeType is an enum
+            Role = employee.EmployeeType.ToString(),
             IsActive = employee.IsActive,
             Email = employee.Email
         };
 
         return (true, employeeDto);
     }
+
 
 
 }
