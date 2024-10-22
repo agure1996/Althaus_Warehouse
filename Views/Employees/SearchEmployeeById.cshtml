@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Get Employee by ID";
+}
+
+<h1>Get Employee by ID</h1>
+
+<div>
+    <form id="employeeForm">
+        <label for="employeeId">Enter Employee ID:</label>
+        <input type="number" id="employeeId" placeholder="Employee ID" min="1" required />
+        <button type="submit">Search Employee</button>
+    </form>
+</div>
+
+<!-- Button to go back to the employee list -->
+<a class="btn btn-secondary" href="/Employees/Index">Back to Employee List</a>
+
+<!-- Include the JS script -->
+<script src="~/js/employee.js"></script>

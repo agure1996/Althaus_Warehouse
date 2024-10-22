@@ -35,25 +35,36 @@ namespace Althaus_Warehouse.Controllers
 
             return View();
         }
-
-        // GET: Employees/GetById/{id}
+        // Controller Action to Render the Search View
+        // GET: Employees/GetEmployeeById
         [HttpGet]
-        public async Task<IActionResult> GetById(int id)
+        public IActionResult SearchEmployeeById()
         {
-            var employee = await _employeeService.GetEmployeeByIdAsync(id);
-            if (employee == null)
+            return View(); // This renders the search form to input employee ID
+        }
+
+        // Controller Action to Fetch Employee by ID
+        // GET: Employees/GetEmployeeById/{id}
+        [HttpGet]
+        public async Task<IActionResult> GetEmployeeById(int id)
+        {
+            if (id <= 0) // Handle case when id is 0 or negative
             {
-                return NotFound(); // Return a 404 if the employee is not found
+                return BadRequest(new { Message = "Invalid Employee ID." });
             }
 
-            return View(employee); // Return a view displaying the employee details
+            var employee = await _employeeService.GetEmployeeByIdAsync(id);
+
+            if (employee == null)
+            {
+                return NotFound(new { Message = $"Employee with ID {id} does not exist." });
+            }
+
+            return Ok(employee);
+
         }
 
-        // GET: Employees/GetById/{id}
-        public IActionResult GetEmployeeById()
-        {
-            return View(); // This will return the view for entering the employee ID
-        }
+
 
 
 

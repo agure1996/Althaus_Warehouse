@@ -29,7 +29,7 @@ const updateNavItems = (userRole) => {
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="employeesDropdown">
                         <li><a class="dropdown-item" href="/Employees/Index">Get All Employees</a></li>
-                        <li><a class="dropdown-item" href="/Employees/GetEmployeeById">Get Employee by ID</a></li>
+                        <li><a class="dropdown-item" href="/Employees/SearchEmployeeById">Get Employee by ID</a></li>
                          <li><a class="dropdown-item" href="/Employees/Create">Create Employee</a></li>
                     </ul>
                 </li>
