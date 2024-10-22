@@ -12,7 +12,7 @@ namespace Althaus_Warehouse.Controllers
         {
             _logger = logger;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
             return View();

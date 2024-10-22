@@ -2,13 +2,17 @@
     ViewData["Title"] = "Get Employee by ID";
 }
 
+<link rel="stylesheet" href="~/css/employeescss/getemployeebyid.css" />
+
 <h1>Get Employee by ID</h1>
 
 <div>
-    <form id="employeeForm">
-        <label for="employeeId">Enter Employee ID:</label>
-        <input type="number" id="employeeId" placeholder="Employee ID" min="1" required />
-        <button type="submit">Search Employee</button>
+    <form id="employeeForm" class="form-inline mb-3">
+        <div class="form-group">
+            <label for="employeeId" class="sr-only">Enter Employee ID:</label>
+            <input type="number" id="employeeId" class="form-control mr-2" placeholder="Employee ID" min="1" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Search Employee</button>
     </form>
 </div>
 

@@ -55,7 +55,7 @@ const handleLogin = async (formData) => {
         console.error("Error during login:", error);
 
         // Show a generic error message to the user
-        alert("An error occurred during login. Please try again later.");
+        alert(`Error during login: ${error.message}`);
     }
 };
 

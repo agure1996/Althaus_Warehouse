@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Althaus Warehouse</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <!--  <link rel="stylesheet" href="~/css/custom-styles.css" asp-append-version="true" /> -->
+    <link rel="stylesheet" href="~/css/sharedcss/global.css" />
+    <link rel="stylesheet" href="~/css/sharedcss/navbar.css" />
+    <link rel="stylesheet" href="~/css/sharedcss/header.css" />
+    <link rel="stylesheet" href="~/css/sharedcss/body.css" />
+    <link rel="stylesheet" href="~/css/sharedcss/footer.css" />
+    <link rel="stylesheet" href="~/css/sharedcss/homepage.css" />
 </head>
 <body>
     <header>
@@ -19,15 +23,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1" id="nav-items">
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Test" asp-action="Index">Test</a>
-                        </li> -->
-
-                        <!-- The dynamic items will be inserted here -->
-                        <!-- This part will be populated dynamically by navbar.js -->
+                       
                     </ul>
                 </div>
             </div>
@@ -36,10 +32,9 @@
 
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody() <!-- Main content will be injected here -->
+            @RenderBody() 
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - Althaus Warehouse - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
@@ -48,8 +43,8 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/navbar.js" asp-append-version="true"></script> <!-- Load navbar.js -->
-    <script src="~/js/login.js" asp-append-version="true"></script>  <!-- Load login.js -->
+    <script src="~/js/navbar.js" asp-append-version="true"></script> 
+    <script src="~/js/login.js" asp-append-version="true"></script>  
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)

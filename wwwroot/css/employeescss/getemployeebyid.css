@@ -1,0 +1,18 @@
+﻿/* GetEmployeeById.css */
+
+h1 {
+    font-size: 2rem; /* Larger font for the main heading */
+    margin-bottom: 20px; /* Spacing below the heading */
+}
+
+#employeeForm {
+    margin-bottom: 20px; /* Space below the form */
+}
+
+.form-inline .form-group {
+    margin-right: 10px; /* Space between inline form elements */
+}
+
+.btn-primary {
+    margin-left: 5px; /* Small left margin for the button */
+}

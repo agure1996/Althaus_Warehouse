@@ -1,0 +1,14 @@
+﻿.homepage-intro {
+    padding: 20px;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 5px;
+}
+
+.features-section ul {
+    list-style-type: none; /* Hide bullet points */
+    padding: 0; /* Remove padding */
+}
+
+h1, p {
+    margin: 10px 0; /* Add spacing between elements */
+}

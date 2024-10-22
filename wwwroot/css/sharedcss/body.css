@@ -1,0 +1,9 @@
+﻿.container {
+    margin-top: 20px; /* Add some spacing at the top */
+}
+
+main {
+    background-color: rgb(255, 255, 255); /* White background */
+    border-radius: 5px; /* Rounded corners */
+    padding: 20px; /* Padding for content */
+}

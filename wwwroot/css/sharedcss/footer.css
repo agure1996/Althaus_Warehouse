@@ -1,0 +1,13 @@
+﻿footer {
+    background-color: #111; /* Lightsteelblue */
+    color: rgb(232, 232, 232); /* Footer text color */
+    padding: 10px 0;
+}
+
+    footer a {
+        color: rgb(248, 211, 195); /* Link color in footer */
+    }
+
+        footer a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }

@@ -1,0 +1,22 @@
+﻿/* EditEmployee.css */
+
+h1 {
+    font-size: 2rem; /* Consistent heading size */
+    margin-bottom: 20px; /* Space below the heading */
+}
+
+.form-group {
+    margin-bottom: 15px; /* Space between form groups */
+}
+
+label {
+    font-weight: bold; /* Make labels bold */
+}
+
+.btn-primary {
+    margin-top: 1rem;
+}
+.btn-secondary {
+    margin-top: 1rem;
+}
+
