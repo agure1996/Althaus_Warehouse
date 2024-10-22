@@ -23,25 +23,22 @@ public class AuthService : IAuthService
     public string GenerateToken(string email, string role)
     {
         var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Email, email), 
-            new Claim(ClaimTypes.Role, role)   
-        };
+            {
+                new Claim("name", email),
+                new Claim("Role", role)
+            };
+
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
+
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        // Read issuer and audience from the configuration
-        var issuer = _configuration["Authentication:Issuer"];
-        var audience = _configuration["Authentication:Audience"];
-
         var token = new JwtSecurityToken(
-            issuer: issuer,
-            audience: audience,
+            issuer: "http://localhost:5168/",
+            audience: "althauswarehouse",
             claims: claims,
             expires: DateTime.Now.AddHours(1),
-            signingCredentials: creds
-        );
+            signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
