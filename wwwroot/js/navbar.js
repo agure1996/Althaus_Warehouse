@@ -21,23 +21,22 @@ const updateNavItems = (userRole) => {
     if (userRole) {
         // If the user has certain roles, show additional dropdowns
         if (['Manager', 'HR', 'Sales'].includes(userRole)) {
-            // Employees Dropdown
-            navItems.innerHTML += `
+                // Employees Dropdown
+                navItems.innerHTML += `
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="employeesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Employees
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="employeesDropdown">
                         <li><a class="dropdown-item" href="/Employees/Index">Get All Employees</a></li>
-                        <li><a class="dropdown-item" href="/Employees/GetById">Get Employee by ID</a></li>
-                        <li><a class="dropdown-item" href="/Employees/Create">Create Employee</a></li>
-                        <li><a class="dropdown-item" href="/Employees/Delete">Delete Employee</a></li>
+                        <li><a class="dropdown-item" href="/Employees/GetEmployeeById">Get Employee by ID</a></li>
+                         <li><a class="dropdown-item" href="/Employees/Create">Create Employee</a></li>
                     </ul>
                 </li>
             `;
 
-            // Items Dropdown
-            navItems.innerHTML += `
+                // Items Dropdown
+                navItems.innerHTML += `
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="itemsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Items
@@ -45,12 +44,12 @@ const updateNavItems = (userRole) => {
                     <ul class="dropdown-menu" aria-labelledby="itemsDropdown">
                         <li><a class="dropdown-item" href="/Items/Index">Get All Items</a></li>
                         <li><a class="dropdown-item" href="/Items/GetById">Get Item by ID</a></li>
-                        <li><a class="dropdown-item" href="/Items/GetByCategory">Get Items by Category</a></li>
-                        <li><a class="dropdown-item" href="/Items/Create">Create Item</a></li>
+                        <li><a class="dropdown-item" href="/Items/Create">Create Item</a></li> <!-- Correct link -->
                         <li><a class="dropdown-item" href="/Items/Manage">Manage Item (Patch/Delete)</a></li>
                     </ul>
                 </li>
             `;
+
         }
 
         // Add a "Logout" link for authenticated users

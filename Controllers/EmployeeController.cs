@@ -11,7 +11,7 @@ namespace Althaus_Warehouse.Controllers
     /// Controller to manage operations related to employees in the warehouse.
     /// </summary>
     [Route("api/v{version:apiVersion}/employees")]
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "manager")]
     [Asp.Versioning.ApiVersion(1.0)]
     [ApiController]
     public class EmployeeController : ControllerBase
@@ -25,6 +25,18 @@ namespace Althaus_Warehouse.Controllers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        }
+
+
+        [HttpPost]
+        public IActionResult Create(Employee employee)
+        {
+            if (ModelState.IsValid)
+            {
+                // Logic to save the employee to the database
+                return RedirectToAction("Index"); // Redirect to a different action to avoid loops
+            }
+            return Create(employee); // Return to the same view if validation fails
         }
 
         /// <summary>

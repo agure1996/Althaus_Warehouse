@@ -1,0 +1,13 @@
+﻿@model Althaus_Warehouse.Models.Entities.Employee
+
+<h2>Employee Details</h2>
+
+<div>
+    <p><strong>First Name:</strong> @Model.FirstName</p>
+    <p><strong>Last Name:</strong> @Model.LastName</p>
+    <p><strong>Email:</strong> @Model.Email</p>
+    <p><strong>Employee Type:</strong> @Model.EmployeeType.ToString()</p>
+    <p><strong>Date Hired:</strong> @Model.DateHired.ToShortDateString()</p>
+</div>
+
+<a class="btn btn-secondary" asp-action="Index">Back to List</a>

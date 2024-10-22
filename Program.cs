@@ -114,7 +114,7 @@ namespace Althaus_Warehouse
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseCors("AllowAll"); // Use the CORS policy
+            //app.UseCors("AllowAll"); // Use the CORS policy
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -128,9 +128,15 @@ namespace Althaus_Warehouse
             app.MapControllerRoute(
             name: "login",
             pattern: "Auth/{controller=Login}/{action=Index}/{id?}");
+
             app.MapControllerRoute(
                 name: "test",
                 pattern: "{controller=Test}/{action=Index}/{id?}");
+
+            app.MapControllerRoute(
+                name: "employees",
+                pattern: "{controller = Employees}/{action=Index}/{id?}");
+
 
 
             app.Run();
