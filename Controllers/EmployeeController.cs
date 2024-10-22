@@ -4,8 +4,6 @@ using Althaus_Warehouse.Services.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Althaus_Warehouse.Controllers
 {
@@ -58,7 +56,7 @@ namespace Althaus_Warehouse.Controllers
         /// <returns>The employee as <see cref="EmployeeDTO"/> if found, or a 404 status if not found.</returns>
         /// <response code="200">Returns the employee if found.</response>
         /// <response code="404">Returns Not Found if the employee doesn't exist.</response>
-        [HttpGet("{id}")]
+        [HttpGet("{id}",Name = "GetEmployeeById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<EmployeeDTO>> GetEmployeeById(int id)

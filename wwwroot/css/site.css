@@ -7,7 +7,7 @@ body {
 }
 
 header {
-    background-color: #4b3d36; /* Dark brown header */
+    background-color: burlywood; /* Dark brown header */
     color: white;
 }
 
@@ -38,7 +38,7 @@ a {
 
 /* Rustic Footer */
 footer {
-    background-color: #4b3d36; /* Match header */
+    background-color: lightsteelblue; 
     color: #e8e8e8; /* Footer text color */
     padding: 10px 0;
 }

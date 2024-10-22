@@ -61,12 +61,18 @@ namespace Althaus_Warehouse.Services.Repositories
         Task<bool> SaveChangesAsync();
 
         /// <summary>
-        /// Retrieves items that belong to the specified item category by either itemTypeId or categoryName.
+        /// Retrieves items that belong to the specified item category by categoryName.
         /// </summary>
-        /// <param name="itemTypeId">The unique identifier of the item type/category to retrieve items for (optional).</param>
         /// <param name="categoryName">The unique name of the item type/category to retrieve items for (optional).</param>
         /// <returns>A list of <see cref="Item"/> objects that match the criteria.</returns>
-        Task<IEnumerable<Item>> GetItemsByCategoryAsync(int? itemTypeId = null, string? categoryName = null);
+        Task<IEnumerable<Item>> GetItemsByCategoryNameAsync(string? categoryName = null);
+        /// <summary>
+        /// Retrieves items that belong to the specified item category by itemTypeId.
+        /// </summary>
+        /// <param name="itemTypeId">The unique identifier of the item type/category to retrieve items for (optional).</param>
+        /// <returns>A list of <see cref="Item"/> objects that match the criteria.</returns>
+        Task<IEnumerable<Item>> GetItemsByCategoryIdAsync(int? itemTypeId = null);
+
 
     }
 }

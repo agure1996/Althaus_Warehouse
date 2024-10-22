@@ -10,10 +10,12 @@ using Althaus_Warehouse.DBContext;
 public class AuthService : IAuthService
 {
     private readonly string? _secretKey;
+    private readonly IConfiguration _configuration; // Added IConfiguration
     private readonly WarehouseDbContext _context;
 
     public AuthService(IConfiguration configuration, WarehouseDbContext context)
     {
+        _configuration = configuration; // Initialize IConfiguration
         _secretKey = configuration["Authentication:SecretKey"];
         _context = context; // Initialize your DbContext
     }
@@ -22,21 +24,24 @@ public class AuthService : IAuthService
     {
         var claims = new List<Claim>
         {
-            new Claim("name", email),
-            new Claim("Role", role)
+            new Claim(ClaimTypes.Email, email), 
+            new Claim(ClaimTypes.Role, role)   
         };
 
-#pragma warning disable CS8604 // Possible null reference argument.
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
-#pragma warning restore CS8604 // Possible null reference argument.
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+        // Read issuer and audience from the configuration
+        var issuer = _configuration["Authentication:Issuer"];
+        var audience = _configuration["Authentication:Audience"];
+
         var token = new JwtSecurityToken(
-            issuer: "http://localhost:5168/",
-            audience: "althauswarehouse",
+            issuer: issuer,
+            audience: audience,
             claims: claims,
             expires: DateTime.Now.AddHours(1),
-            signingCredentials: creds);
+            signingCredentials: creds
+        );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
@@ -74,7 +79,4 @@ public class AuthService : IAuthService
 
         return (true, employeeDto);
     }
-
-
-
 }

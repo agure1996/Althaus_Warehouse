@@ -31,37 +31,30 @@ namespace Althaus_Warehouse.Services.Repositories
                 .ToListAsync();
 
         /// <inheritdoc/>
-#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
-        public async Task<IEnumerable<Item>> GetItemsByCategoryAsync(int? itemTypeId, string categoryName)
-#pragma warning restore CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
+        public async Task<IEnumerable<Item>> GetItemsByCategoryAsync(int itemTypeId)
         {
-            var query = _context.Items.AsQueryable();
-
-            // Filter by ItemTypeId if provided
-            if (itemTypeId.HasValue)
-            {
-                query = query.Where(i => i.ItemTypeId == itemTypeId);
-            }
-
-            // Filter by categoryName (case-insensitive) if provided
-            if (!string.IsNullOrWhiteSpace(categoryName))
-            {
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                query = query.Join(
-                    _context.ItemTypes,
-                    item => item.ItemTypeId,
-                    itemType => itemType.Id,
-                    (item, itemType) => new { Item = item, ItemType = itemType })
-                    .Where(x => x.ItemType.Name.Equals(categoryName, StringComparison.CurrentCultureIgnoreCase)) // Case-insensitive comparison
-                    .Select(x => x.Item);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-            }
-
-            // Include related ItemType
-            query = query.Include(i => i.ItemType);
+            var query = _context.Items
+                .Where(i => i.ItemTypeId == itemTypeId)
+                .Include(i => i.ItemType); // Include related ItemType
 
             return await query.ToListAsync();
         }
+
+        public async Task<IEnumerable<Item>> GetItemsByCategoryNameAsync(string categoryName)
+        {
+            if (string.IsNullOrWhiteSpace(categoryName))
+            {
+                throw new ArgumentException("Category name cannot be null or empty.", nameof(categoryName));
+            }
+
+            var query = _context.Items
+                .Include(i => i.ItemType) // Include related ItemType
+                .Where(item => item.ItemType.Name.ToLower() == categoryName.ToLower()); // Case-insensitive comparison
+
+            return await query.ToListAsync();
+        }
+
+
 
         /// <inheritdoc/>
         public async Task<Item> GetItemByIdAsync(int id)
@@ -118,5 +111,22 @@ namespace Althaus_Warehouse.Services.Repositories
         public async Task<bool> SaveChangesAsync() =>
             // Save changes to the database
             (await _context.SaveChangesAsync()) > 0;
+
+        public async Task<IEnumerable<Item>> GetItemsByCategoryIdAsync(int? itemTypeId = null)
+        {
+            var query = _context.Items.AsQueryable();
+
+            // If itemTypeId is provided, filter items by that ID
+            if (itemTypeId.HasValue)
+            {
+                query = query.Where(i => i.ItemTypeId == itemTypeId.Value);
+            }
+
+            // Include related ItemType
+            query = query.Include(i => i.ItemType);
+
+            return await query.ToListAsync();
+        }
+
     }
 }

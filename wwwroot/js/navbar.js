@@ -1,4 +1,4 @@
-﻿"use strict"; // Enable strict mode for better error-checking and safer JavaScript
+﻿"use strict"; // Enable strict mode
 
 /**
  * updateNavItems: Updates the navigation bar dynamically based on the user's role.
@@ -18,15 +18,41 @@ const updateNavItems = (userRole) => {
         <li class="nav-item"><a class="nav-link" href="/Test">Test</a></li>
     `;
 
-    // If the user is authenticated (i.e., userRole is not null), show role-specific items
     if (userRole) {
-        // Show links for "Items" and "Employees" if the user has certain roles (Manager, HR, Sales)
-        if (['Manager'].includes(userRole)) {
+        // If the user has certain roles, show additional dropdowns
+        if (['Manager', 'HR', 'Sales'].includes(userRole)) {
+            // Employees Dropdown
             navItems.innerHTML += `
-                <li class="nav-item"><a class="nav-link" href="/Items/Index">Items</a></li>
-                <li class="nav-item"><a class="nav-link" href="/Employees/Index">Employees</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="employeesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Employees
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="employeesDropdown">
+                        <li><a class="dropdown-item" href="/Employees/Index">Get All Employees</a></li>
+                        <li><a class="dropdown-item" href="/Employees/GetById">Get Employee by ID</a></li>
+                        <li><a class="dropdown-item" href="/Employees/Create">Create Employee</a></li>
+                        <li><a class="dropdown-item" href="/Employees/Delete">Delete Employee</a></li>
+                    </ul>
+                </li>
+            `;
+
+            // Items Dropdown
+            navItems.innerHTML += `
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="itemsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Items
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="itemsDropdown">
+                        <li><a class="dropdown-item" href="/Items/Index">Get All Items</a></li>
+                        <li><a class="dropdown-item" href="/Items/GetById">Get Item by ID</a></li>
+                        <li><a class="dropdown-item" href="/Items/GetByCategory">Get Items by Category</a></li>
+                        <li><a class="dropdown-item" href="/Items/Create">Create Item</a></li>
+                        <li><a class="dropdown-item" href="/Items/Manage">Manage Item (Patch/Delete)</a></li>
+                    </ul>
+                </li>
             `;
         }
+
         // Add a "Logout" link for authenticated users
         navItems.innerHTML += `
             <li class="nav-item"><a class="nav-link" href="/Auth/Logout">Logout</a></li>
@@ -34,60 +60,41 @@ const updateNavItems = (userRole) => {
     } else {
         // Add a "Login" link for unauthenticated users
         navItems.innerHTML += `
-            <li class="nav-item"><a class="nav-link" href="/Auth/login">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="/Auth/Login">Login</a></li>
         `;
     }
 };
 
-/**
- * parseJwt: Decodes a JWT (JSON Web Token) and extracts the 'Role' claim.
- * Used to determine the role of the authenticated user from the token.
- *
- * @param {string} token - The JWT token.
- * @returns {string} - The user role extracted from the token's 'Role' claim.
- */
+// Function to parse JWT and extract user role
 const parseJwt = (token) => {
-    // Split the token to get the payload (second part of JWT)
     const base64Url = token.split('.')[1];
-
-    // Decode the base64-encoded payload
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-
-    // Parse the JSON payload to extract claims
     const decodedToken = JSON.parse(window.atob(base64));
-
-    // Return the 'Role' claim from the decoded token
-    return decodedToken["Role"];
+    return decodedToken["Role"]; // Extract 'Role' claim directly from the token
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // DOMContentLoaded ensures the script runs after the page content is fully loaded
-
-    // Retrieve the token from localStorage
+    // Get the token from localStorage on load
     const token = localStorage.getItem('token');
-    let userRole = null; // Default role is null (unauthenticated)
+    let userRole = null;
 
-    // If the token exists, parse it to extract the user role
+    // If the token exists, extract the user role from the token
     if (token) {
         userRole = parseJwt(token);
     }
 
-    // Update the navigation bar based on the user's role (or lack of one)
-    updateNavItems(userRole);
+    updateNavItems(userRole); // Update the navbar with the correct role
 
-    // Event listener for all clicks within the navbar, using event delegation
+    // Event delegation for click events on the navbar
     document.getElementById('nav-items').addEventListener('click', function (e) {
-        const target = e.target.closest('.nav-link'); // Identify the closest clicked link element
+        const target = e.target.closest('.nav-link');
         if (target) {
-            // If the "Logout" link is clicked
             if (target.textContent === 'Logout') {
-                e.preventDefault(); // Prevent default link behavior (page navigation)
-                logout(); // Call the logout function
-            }
-            // If the "Login" link is clicked
-            else if (target.textContent === 'Login') {
-                e.preventDefault(); // Prevent default link behavior
-                window.location.href = "/Auth/login"; // Redirect to the login page
+                e.preventDefault(); // Prevent default anchor behavior
+                logout(); // Call logout function
+            } else if (target.textContent === 'Login') {
+                e.preventDefault(); // Prevent default anchor behavior
+                window.location.href = "/Auth/Login"; // Redirect to login page
             }
         }
     });

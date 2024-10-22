@@ -7,16 +7,12 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Althaus_Warehouse.Controllers
 {
-    /// <summary>
-    /// Controller to manage operations related to items in the warehouse.
-    /// </summary>
     [Route("api/v{version:apiVersion}/items")]
-    [Authorize(Roles = "Manager")] // Restricting my endpoint access to Admin users
     [Asp.Versioning.ApiVersion(1.0)]
     [ApiController]
     public class ItemController : ControllerBase
     {
-        private readonly ILogger<ItemController> _logger; 
+        private readonly ILogger<ItemController> _logger;
         private readonly IItemRepository _itemRepository;
         private readonly IItemTypeRepository _itemTypeRepository;
         private readonly IMapper _mapper;
@@ -29,18 +25,51 @@ namespace Althaus_Warehouse.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        // Existing GetItems() method remains unchanged...
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<GetItemDTO>>> GetAllItems()
+        {
+            try
+            {
+                var items = await _itemRepository.GetAllItemsAsync();
+                var itemDTOs = _mapper.Map<IEnumerable<GetItemDTO>>(items);
+                return Ok(itemDTOs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving all items.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
 
-        /// <summary>
-        /// Creates a new item in the warehouse.
-        /// </summary>
-        /// <param name="item">The item data to create as <see cref="CreateItemDTO"/>.</param>
-        /// <returns>The created item as <see cref="GetItemDTO"/>.</returns>
-        /// <response code="201">If the item was created successfully.</response>
+        [HttpGet("{id}", Name = "GetItemById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<GetItemDTO>> GetItemById(int id)
+        {
+            try
+            {
+                var itemEntity = await _itemRepository.GetItemByIdAsync(id);
+                if (itemEntity == null)
+                {
+                    _logger.LogWarning("Item with ID {Id} not found.", id);
+                    return NotFound($"Item with ID {id} was not found.");
+                }
+
+                var itemDTO = _mapper.Map<GetItemDTO>(itemEntity);
+                return Ok(itemDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving item with ID {Id}.", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
+
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = "Admin")] // Ensure only Admins can create items
         public async Task<ActionResult<GetItemDTO>> CreateItem([FromBody] CreateItemDTO item)
         {
             if (item == null)
@@ -51,8 +80,7 @@ namespace Althaus_Warehouse.Controllers
             try
             {
                 var newItem = _mapper.Map<Item>(item);
-
-                if (item.ItemTypeId > 0) // Assuming ItemTypeId must be a positive number
+                if (item.ItemTypeId > 0)
                 {
                     var itemType = await _itemTypeRepository.GetItemTypeByIdAsync(item.ItemTypeId);
                     newItem.ItemType = itemType;
@@ -65,7 +93,7 @@ namespace Althaus_Warehouse.Controllers
                 createdItem.InStock = newItem.Quantity > 0;
 
                 _logger.LogInformation("Item with ID {Id} created successfully.", createdItem.Id);
-                return CreatedAtRoute("GetItem", new { id = createdItem.Id }, createdItem);
+                return CreatedAtRoute("GetItemById", new { id = createdItem.Id }, createdItem);
             }
             catch (Exception ex)
             {
@@ -74,20 +102,12 @@ namespace Althaus_Warehouse.Controllers
             }
         }
 
-        // Additional methods like UpdateItem and DeleteItem should also have the [Authorize(Roles = "Admin")] attribute added.
-
-        /// <summary>
-        /// Updates an existing item in the warehouse.
-        /// </summary>
-        /// <param name="id">The ID of the item to update.</param>
-        /// <param name="itemBeingUpdated">The updated item data as <see cref="UpdateItemDTO"/>.</param>
-        /// <response code="204">If the item was updated successfully.</response>
-        /// <response code="404">If the item is not found.</response>
+        // Add Authorization attribute for Admin
         [HttpPut("{id}")]
+        [Authorize(Roles = "Manager")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = "Admin")] // Ensure only Admins can update items
         public async Task<ActionResult> UpdateItem(int id, [FromBody] UpdateItemDTO itemBeingUpdated)
         {
             if (itemBeingUpdated == null)
@@ -122,16 +142,10 @@ namespace Althaus_Warehouse.Controllers
             }
         }
 
-        /// <summary>
-        /// Deletes an item from the warehouse.
-        /// </summary>
-        /// <param name="id">The ID of the item to delete.</param>
-        /// <response code="204">If the item was deleted successfully.</response>
-        /// <response code="404">If the item is not found.</response>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Manager")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Roles = "Admin")] // Ensure only Admins can delete items
         public async Task<ActionResult> DeleteItem(int id)
         {
             try
@@ -152,6 +166,56 @@ namespace Althaus_Warehouse.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error deleting item with ID {Id}.", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
+
+        [HttpGet("category")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<GetItemDTO>>> GetItemsByItemTypeId([FromQuery] int itemTypeId)
+        {
+            try
+            {
+                var items = await _itemRepository.GetItemsByCategoryIdAsync(itemTypeId);
+                if (items == null || !items.Any())
+                {
+                    _logger.LogWarning("No items found for Item Type ID {ItemTypeId}.", itemTypeId);
+                    return NotFound($"No items found for Item Type ID {itemTypeId}.");
+                }
+
+                var itemDTOs = _mapper.Map<IEnumerable<GetItemDTO>>(items);
+                return Ok(itemDTOs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving items for Item Type ID {ItemTypeId}.", itemTypeId);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
+
+
+        // Change the route to avoid conflict
+        [HttpGet("category/name")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<GetItemDTO>>> GetItemsByItemTypeName([FromQuery] string? categoryTypeName)
+        {
+            try
+            {
+                var items = await _itemRepository.GetItemsByCategoryNameAsync(categoryTypeName);
+                if (items == null || !items.Any())
+                {
+                    _logger.LogWarning("No items found for Category Name {CategoryTypeName}.", categoryTypeName);
+                    return NotFound("No items found for the given category criteria.");
+                }
+
+                var itemDTOs = _mapper.Map<IEnumerable<GetItemDTO>>(items);
+                return Ok(itemDTOs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving items for Category Name {CategoryTypeName}.", categoryTypeName);
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
             }
         }

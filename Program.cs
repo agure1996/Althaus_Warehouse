@@ -92,7 +92,11 @@ namespace Althaus_Warehouse
             // Adding authorization
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Manager"));
+                options.AddPolicy("RequireManager", policy => policy.RequireRole("Manager")); 
+                // This is fine
+                // Or you can use:
+                // options.AddPolicy("RequireManager", policy => policy.RequireClaim(ClaimTypes.Role, "Manager")); 
+                // This is also an option
             });
 
             // Add services to the container (including MVC for views)
