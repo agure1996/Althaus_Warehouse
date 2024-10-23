@@ -40,10 +40,6 @@ namespace Althaus_Warehouse.Services.Repositories
 
 
 
-
-
-
-
         /// <inheritdoc/>
         public async Task<IEnumerable<Item>> GetItemsByCategoryAsync(int itemTypeId)
         {
@@ -82,7 +78,7 @@ namespace Althaus_Warehouse.Services.Repositories
 
 
         /// <inheritdoc/>
-        public async Task AddItemAsync(Item item)
+        public async Task CreateItemAsync(Item item)
         {
             // Ensure DateCreated is set when adding the item
             item.DateCreated = DateTime.UtcNow;
@@ -92,9 +88,19 @@ namespace Althaus_Warehouse.Services.Repositories
         /// <inheritdoc/>
         public async Task UpdateItemAsync(Item item)
         {
-            _context.Items.Update(item);
-            await _context.SaveChangesAsync(); // This is where changes are committed
+            try
+            {
+                // Attach the entity to the context and mark it as modified
+                _context.Items.Update(item);  // Ensure this is Update, not Add
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating item: {ex.Message}");
+                throw;  // Rethrow the exception to handle it further up the stack
+            }
         }
+
 
 
 

@@ -1,6 +1,6 @@
 ﻿@model Althaus_Warehouse.Models.Entities.Item
 
-<link rel="stylesheet" href="~/css/itemscss/createitem.css" />
+<link rel="stylesheet" href="~/css/itemscss/edititem.css" />
 
 <h2>Item Details</h2>
 <div>
@@ -13,4 +13,4 @@
     <p><strong>Item Type:</strong> @(Model.ItemType?.Name ?? "N/A")</p>
 </div>
 <a asp-action="Update" class="btn btn-primary" asp-route-id="@Model.Id">Edit Item</a>
-<a asp-action="Index" class="btn btn-secondary" style="margin-top: 10px;">Back to List</a>
+<a asp-action="Index" class="btn btn-secondary" style="padding-top: 8.5px;padding-bottom: 8.5px;">Back to List</a>

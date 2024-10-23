@@ -35,11 +35,29 @@ namespace Althaus_Warehouse.Services.ItemService
 
 
 
-        public async Task CreateItemAsync(Item item)
+        public async Task CreateItemAsync(CreateItemDTO itemDTO)
         {
-            if (item == null) throw new ArgumentNullException(nameof(item));
-            await _itemRepository.AddItemAsync(item);
+            if (itemDTO == null)
+                throw new ArgumentNullException(nameof(itemDTO));
+
+            // Map CreateItemDTO to the Item entity
+            var item = new Item
+            {
+                Name = itemDTO.Name,
+                Description = itemDTO.Description,
+                Quantity = itemDTO.Quantity,
+                Price = itemDTO.Price,
+                CreatedById = itemDTO.CreatedById ?? 1, // Assuming you handle CreatedById logic elsewhere
+                ItemTypeId = itemDTO.ItemTypeId
+            };
+
+            // Call repository to create item
+            await _itemRepository.CreateItemAsync(item);
+
+            // Save changes in the repository
+            await _itemRepository.SaveChangesAsync();
         }
+
 
         public async Task UpdateItemAsync(int itemId, UpdateItemDTO itemDTO)
         {
@@ -63,12 +81,13 @@ namespace Althaus_Warehouse.Services.ItemService
             item.ItemTypeId = itemDTO.ItemTypeId;
             item.ItemType = itemType;  // Explicitly set the ItemType entity
 
-            // Explicitly update the item in the repository
-            await _itemRepository.UpdateItemAsync(item);  // Make sure this method is implemented in your repository
+            // Update the item in the repository
+            await _itemRepository.UpdateItemAsync(item);  // Ensure Update is correctly implemented
 
             // Save changes
-            await _itemRepository.SaveChangesAsync(); // Ensure SaveChanges is called after all modifications
+            await _itemRepository.SaveChangesAsync(); // This finalizes the update operation
         }
+
 
 
 

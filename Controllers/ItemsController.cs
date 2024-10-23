@@ -49,34 +49,35 @@ namespace Althaus_Warehouse.Controllers
         }
 
 
-
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
+            // Retrieve all item types to populate the dropdown
+            var itemTypes = await _itemService.GetAllItemTypesAsync();
+            ViewBag.ItemTypes = new SelectList(itemTypes, "Id", "Name"); // Prepare item types for view
+
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateItemDTO itemDTO)
         {
             if (ModelState.IsValid)
             {
-                // Map CreateItemDTO to Item entity
-                var item = new Item
-                {
-                    Name = itemDTO.Name,
-                    Description = itemDTO.Description,
-                    Quantity = itemDTO.Quantity,
-                    Price = itemDTO.Price,
-                    CreatedById = itemDTO.CreatedById, // This can be set based on your application's logic
-                    ItemTypeId = itemDTO.ItemTypeId
-                };
-
-                await _itemService.CreateItemAsync(item);
+                // Call the service method with the DTO directly
+                await _itemService.CreateItemAsync(itemDTO);
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(itemDTO);
+            // Reload the item types if validation fails
+            var itemTypes = await _itemService.GetAllItemTypesAsync();
+            ViewBag.ItemTypes = new SelectList(itemTypes, "Id", "Name");
+
+            return View(itemDTO); // Re-render the form with validation errors
         }
+
+
 
 
         public async Task<IActionResult> Delete(int id)
@@ -159,26 +160,29 @@ namespace Althaus_Warehouse.Controllers
                 {
                     Console.WriteLine(error.ErrorMessage);
                 }
-                return BadRequest(ModelState);
+                return View(itemDTO); // Render the view with validation errors
             }
 
             try
             {
-                // Round the price to two decimal places
                 itemDTO.Price = Math.Round(itemDTO.Price, 2);
-
                 await _itemService.UpdateItemAsync(id, itemDTO);
-                return RedirectToAction("Details", "Items", new { id = id });
+
+                // Redirect to details page after successful update
+                return RedirectToAction("Details", new { id = id });
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(ex.Message); // Return 404 if item is not found
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error. Please try again later.");
+                // Log the exception details
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
 
 
 

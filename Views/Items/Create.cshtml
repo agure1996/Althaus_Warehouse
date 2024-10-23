@@ -4,6 +4,9 @@
     ViewData["Title"] = "Create Item";
 }
 
+<link rel="stylesheet" href="~/css/itemscss/createitem.css" />
+
+
 <div class="form-container">
     <h2>Create a New Item</h2>
 
@@ -33,17 +36,15 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="ItemTypeId" class="control-label"></label>
-            <select asp-for="ItemTypeId" class="form-control" asp-items="ViewBag.ItemTypes"></select>
+            <label for="ItemTypeId">Item Type</label>
+            <select id="ItemTypeId" asp-for="ItemTypeId" asp-items="ViewBag.ItemTypes" class="form-control" required>
+                <option value="">-- Select Item Type --</option>
+            </select>
             <span asp-validation-for="ItemTypeId" class="text-danger"></span>
         </div>
+
+
 
         <button type="submit" class="btn btn-primary">Create</button>
     </form>
 </div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}

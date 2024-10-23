@@ -1,18 +1,40 @@
 ﻿/* CreateItem.css */
-
 h2 {
-    font-size: 1.75rem; /* Slightly smaller than main heading */
-    margin-bottom: 20px; /* Space below the heading */
+    font-size: 1.75rem;
+    margin-bottom: 20px;
 }
 
 .form-group {
-    margin-bottom: 15px; /* Spacing between form groups */
+    margin-bottom: 15px;
 }
 
 label {
-    font-weight: bold; /* Make labels bold */
+    font-weight: bold;
+}
+
+.form-control select, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    appearance: none; /* Remove default arrow for custom styles */
+}
+
+.form-control select {
+    background-color: #fff; /* Ensure background is white */
+}
+
+select:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); /* Similar focus style to Bootstrap */
 }
 
 .btn-primary {
-    margin-top: 10px; /* Space above the button */
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
 }

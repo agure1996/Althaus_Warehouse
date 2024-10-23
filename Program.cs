@@ -43,12 +43,12 @@ namespace Althaus_Warehouse
             builder.Services.AddScoped<IItemTypeRepository, ItemTypeRepository>();
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            // Adding authentication services
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             // Add AutoMapper for object mapping
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            // Adding authentication services
-            builder.Services.AddScoped<IAuthService, AuthService>();
 
             // Add API versioning
             builder.Services.AddApiVersioning(options =>

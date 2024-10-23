@@ -86,7 +86,7 @@ namespace Althaus_Warehouse.Controllers
                     newItem.ItemType = itemType;
                 }
 
-                await _itemRepository.AddItemAsync(newItem);
+                await _itemRepository.CreateItemAsync(newItem);
                 await _itemRepository.SaveChangesAsync();
 
                 var createdItem = _mapper.Map<GetItemDTO>(newItem);

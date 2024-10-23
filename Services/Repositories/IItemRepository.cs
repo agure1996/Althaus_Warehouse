@@ -26,7 +26,7 @@ namespace Althaus_Warehouse.Services.Repositories
         /// Adds a new item to the warehouse.
         /// </summary>
         /// <param name="item">The <see cref="Item"/> object to add.</param>
-        Task AddItemAsync(Item item);
+        Task CreateItemAsync(Item item);
 
         /// <summary>
         /// Updates an existing item in the warehouse.
