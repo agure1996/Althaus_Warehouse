@@ -103,6 +103,8 @@ namespace Althaus_Warehouse.DBContext
             );
 
             // Seed some Items into the database with the new ItemType foreign key and DateCreated
+            modelBuilder.Entity<Item>().Property(i => i.Price)
+                .HasColumnType("decimal(18,2)");
             modelBuilder.Entity<Item>().HasData(
                 new Item
                 {
@@ -110,7 +112,7 @@ namespace Althaus_Warehouse.DBContext
                     Name = "Laptop",
                     Description = "15-inch laptop with 8GB RAM",
                     Quantity = 50,
-                    Price = 599.99,
+                    Price = 599.99M,
                     CreatedById = 1,
                     ItemTypeId = 24,
                     DateCreated = DateTime.Now
@@ -121,7 +123,7 @@ namespace Althaus_Warehouse.DBContext
                     Name = "Office Chair",
                     Description = "Ergonomic office chair with lumbar support",
                     Quantity = 60,
-                    Price = 249.99,
+                    Price = 249.99M,
                     CreatedById = 2,
                     ItemTypeId = 8,
                     DateCreated = DateTime.Now
@@ -132,7 +134,7 @@ namespace Althaus_Warehouse.DBContext
                     Name = "Mouse",
                     Description = "Wireless mouse",
                     Quantity = 200,
-                    Price = 19.99,
+                    Price = 19.99M,
                     CreatedById = 3,
                     ItemTypeId = 11,
                     DateCreated = DateTime.Now
@@ -143,7 +145,7 @@ namespace Althaus_Warehouse.DBContext
                     Name = "Keyboard",
                     Description = "Mechanical keyboard with RGB lighting",
                     Quantity = 150,
-                    Price = 89.99,
+                    Price = 89.99M,
                     CreatedById = 3,
                     ItemTypeId = 11,
                     DateCreated = DateTime.Now
@@ -154,7 +156,7 @@ namespace Althaus_Warehouse.DBContext
                     Name = "Milk",
                     Description = "Fresh dairy milk",
                     Quantity = 80,
-                    Price = 1.99,
+                    Price = 1.99M,
                     CreatedById = 1,
                     ItemTypeId = 1,
                     DateCreated = DateTime.Now
@@ -165,7 +167,7 @@ namespace Althaus_Warehouse.DBContext
                     Name = "Chicken Breast",
                     Description = "Organic chicken breast",
                     Quantity = 100,
-                    Price = 5.99,
+                    Price = 5.99M,
                     CreatedById = 2,
                     ItemTypeId = 2,
                     DateCreated = DateTime.Now
@@ -176,7 +178,7 @@ namespace Althaus_Warehouse.DBContext
                     Name = "Smartphone",
                     Description = "5G smartphone with 128GB storage",
                     Quantity = 30,
-                    Price = 799.99,
+                    Price = 799.99M,
                     CreatedById = 1,
                     ItemTypeId = 7,
                     DateCreated = DateTime.Now
@@ -187,7 +189,7 @@ namespace Althaus_Warehouse.DBContext
                     Name = "Running Shoes",
                     Description = "Lightweight running shoes",
                     Quantity = 50,
-                    Price = 59.99,
+                    Price = 59.99M,
                     CreatedById = 3,
                     ItemTypeId = 30,
                     DateCreated = DateTime.Now
@@ -198,7 +200,7 @@ namespace Althaus_Warehouse.DBContext
                     Name = "Printer",
                     Description = "Wireless all-in-one printer",
                     Quantity = 40,
-                    Price = 129.99,
+                    Price = 129.99M,
                     CreatedById = 2,
                     ItemTypeId = 11,
                     DateCreated = DateTime.Now
@@ -209,7 +211,7 @@ namespace Althaus_Warehouse.DBContext
                     Name = "Book: C# Programming",
                     Description = "A comprehensive guide to C# programming",
                     Quantity = 100,
-                    Price = 39.99,
+                    Price = 39.99M,
                     CreatedById = 1,
                     ItemTypeId = 12,
                     DateCreated = DateTime.Now

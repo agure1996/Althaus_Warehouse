@@ -29,7 +29,7 @@ namespace Althaus_Warehouse.Services.Repositories
         {
             var totalCount = await _context.Items.CountAsync();
             var items = await _context.Items
-                .Include(item => item.ItemType) // Ensure the ItemType is included
+                .Include(item => item.ItemType)
                 .Skip((currentPage - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -73,12 +73,13 @@ namespace Althaus_Warehouse.Services.Repositories
         /// <inheritdoc/>
         public async Task<Item> GetItemByIdAsync(int id)
         {
-
             return await _context.Items
-                .Include(i => i.ItemType)  // Ensure ItemType is included in the query
+                .Include(i => i.ItemType)  // Include the related ItemType
                 .FirstOrDefaultAsync(i => i.Id == id);
-
         }
+
+
+
 
         /// <inheritdoc/>
         public async Task AddItemAsync(Item item)
@@ -89,13 +90,15 @@ namespace Althaus_Warehouse.Services.Repositories
         }
 
         /// <inheritdoc/>
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task UpdateItemAsync(Item item)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            // Update an existing item in the database
             _context.Items.Update(item);
+            await _context.SaveChangesAsync(); // This is where changes are committed
         }
+
+
+
+
 
         /// <inheritdoc/>
         public async Task DeleteItemAsync(int id)
@@ -120,6 +123,7 @@ namespace Althaus_Warehouse.Services.Repositories
                 .Include(i => i.ItemType)  // Ensure ItemType is included in the query
                 .Where(i => EF.Functions.Like(i.Name, $"%{name}%"))
                 .ToListAsync();
+
 
         /// <inheritdoc/>
         public async Task<bool> SaveChangesAsync() =>

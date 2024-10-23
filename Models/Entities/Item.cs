@@ -8,7 +8,7 @@ namespace Althaus_Warehouse.Models.Entities
     {
         public Item() => DateCreated = DateTime.UtcNow;
 
-        public Item(int id, string name, string description, int quantity, double price, int? createdById, int itemTypeId)
+        public Item(int id, string name, string description, int quantity, decimal price, int? createdById, int itemTypeId)
         {
             Id = id;
             Name = name;
@@ -35,7 +35,7 @@ namespace Althaus_Warehouse.Models.Entities
         public int Quantity { get; set; }
 
         [Required]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         public int? CreatedById { get; set; }
 

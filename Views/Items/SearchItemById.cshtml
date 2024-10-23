@@ -1,5 +1,20 @@
-﻿<form asp-action="GetItemById" method="get">
-    <label for="id">Enter Item ID:</label>
-    <input type="number" name="id" required />
+﻿@{
+    ViewData["Title"] = "Search Item By ID";
+}
+
+<link rel="stylesheet" href="~/css/itemscss/getitembyid.css" />
+
+<h2>Search Item By ID</h2>
+
+<form id="itemForm" asp-action="GetItemById" method="get">
+    <div>
+        <label for="itemId">Enter Item ID:</label>
+        <input type="number" id="itemId" name="id" required />
+    </div>
     <button type="submit">Search</button>
 </form>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+
+<!-- Include the JS script -->
+<script src="~/js/itemsjs/item.js"></script>

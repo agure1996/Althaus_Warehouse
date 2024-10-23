@@ -21,6 +21,11 @@ namespace Althaus_Warehouse.Services.Repositories
         /// <param name="id">The ID of the item type to retrieve.</param>
         /// <returns>The requested item type as <see cref="ItemType"/>.</returns>
         Task<ItemType> GetItemTypeByIdAsync(int id);
+        /// <summary>
+        /// Retrieves item by id.
+        /// </summary>
+        /// <returns>An item <see cref="Item"/>.</returns>
+        Task<Item> GetItemByIdAsync(int id);
 
         /// <summary>
         /// Retrieves a specific item type by name.
@@ -28,6 +33,13 @@ namespace Althaus_Warehouse.Services.Repositories
         /// <param name="name">The name of the item type to retrieve.</param>
         /// <returns>The requested item type as <see cref="ItemType"/>.</returns>
         Task<ItemType> GetItemTypeByNameAsync(string name);
+
+        /// <summary>
+        /// check if item type exists.
+        /// </summary>
+        /// <param name="itemTypeId">The id of the item type to retrieve.</param>
+        /// <returns>Returns true.</returns>
+        Task<bool> ItemTypeExistsAsync(int itemTypeId);
 
         /// <summary>
         /// Adds a new item type.

@@ -1,0 +1,18 @@
+﻿/* CreateItem.css */
+
+h2 {
+    font-size: 1.75rem; /* Slightly smaller than main heading */
+    margin-bottom: 20px; /* Space below the heading */
+}
+
+.form-group {
+    margin-bottom: 15px; /* Spacing between form groups */
+}
+
+label {
+    font-weight: bold; /* Make labels bold */
+}
+
+.btn-primary {
+    margin-top: 10px; /* Space above the button */
+}

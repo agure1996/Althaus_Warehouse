@@ -4,6 +4,7 @@ using Althaus_Warehouse.Models.Entities;
 using Althaus_Warehouse.Models;
 using Althaus_Warehouse.Services.ItemService;
 using Althaus_Warehouse.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Althaus_Warehouse.Controllers
 {
@@ -29,7 +30,23 @@ namespace Althaus_Warehouse.Controllers
 
 
 
+        [HttpGet]
+        public IActionResult SearchItemById()
+        {
+            return View(); // This renders the search form to input employee ID
+        }
 
+        [HttpGet]
+        public async Task<IActionResult> GetItemById(int id)
+        {
+            var item = await _itemService.GetItemByIdAsync(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(item); // Change this line to return JSON
+        }
 
 
 
@@ -96,13 +113,22 @@ namespace Althaus_Warehouse.Controllers
             return View(item);
         }
 
+
+
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Update(int id)
         {
             var item = await _itemService.GetItemByIdAsync(id);
             if (item == null)
             {
                 return NotFound();
+            }
+
+            // Retrieve all item types
+            var itemTypes = await _itemService.GetAllItemTypesAsync();
+            if (itemTypes == null || !itemTypes.Any())
+            {
+                Console.WriteLine("No item types found");
             }
 
             var itemDTO = new UpdateItemDTO
@@ -111,23 +137,57 @@ namespace Althaus_Warehouse.Controllers
                 Name = item.Name,
                 Description = item.Description,
                 Quantity = item.Quantity,
-                Price = item.Price,
-                ItemTypeId = item.ItemTypeId
+                Price = Math.Round(item.Price, 2),
+                ItemTypeId = item.ItemTypeId, // Current item's type
             };
 
+            ViewBag.ItemTypes = new SelectList(itemTypes, "Id", "Name", item.ItemTypeId); // Prepare item types for view
+
             return View(itemDTO);
         }
+
+
+
 
         [HttpPost]
-        public async Task<IActionResult> Edit(UpdateItemDTO itemDTO)
+        public async Task<IActionResult> Update(int id, UpdateItemDTO itemDTO)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await _itemService.UpdateItemAsync(itemDTO.Id, itemDTO); // Ensure both parameters are passed
-                return RedirectToAction("Index");
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                foreach (var error in errors)
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+                return BadRequest(ModelState);
             }
 
-            return View(itemDTO);
+            try
+            {
+                // Round the price to two decimal places
+                itemDTO.Price = Math.Round(itemDTO.Price, 2);
+
+                await _itemService.UpdateItemAsync(id, itemDTO);
+                return RedirectToAction("Details", "Items", new { id = id });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error. Please try again later.");
+            }
         }
+
+
+
+
+
+
+
+
+
+
     }
 }

@@ -1,0 +1,37 @@
+﻿@model Althaus_Warehouse.Models.DTO.ItemDTOs.UpdateItemDTO
+
+<link rel="stylesheet" href="~/css/itemscss/edititem.css" />
+
+<h2>Edit Item</h2>
+
+<form asp-action="Update" method="post">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div>
+        <label for="Name">Item Name</label>
+        <input type="text" name="Name" value="@Model.Name" required />
+    </div>
+    <div>
+        <label for="Description">Description</label>
+        <textarea name="Description">@Model.Description</textarea>
+    </div>
+    <div>
+        <label for="Quantity">Quantity</label>
+        <input type="number" name="Quantity" value="@Model.Quantity" required />
+    </div>
+    <div>
+        <label for="Price">Price</label>
+        <input type="text" asp-for="Price" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div>
+        <label for="ItemTypeId">Item Type</label>
+        <select asp-for="ItemTypeId" asp-items="ViewBag.ItemTypes" required>
+            <option value="">-- Select Item Type --</option>
+        </select>
+        <span asp-validation-for="ItemTypeId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
