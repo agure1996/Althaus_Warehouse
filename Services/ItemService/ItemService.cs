@@ -96,6 +96,8 @@ namespace Althaus_Warehouse.Services.ItemService
         public async Task DeleteItemAsync(int itemId)
         {
             await _itemRepository.DeleteItemAsync(itemId);
+            // Save changes
+            await _itemRepository.SaveChangesAsync();
         }
     }
 }
