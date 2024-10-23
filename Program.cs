@@ -132,10 +132,6 @@ namespace Althaus_Warehouse
             pattern: "Auth/{controller=Login}/{action=Index}/{id?}");
 
             app.MapControllerRoute(
-                name: "test",
-                pattern: "{controller=Test}/{action=Index}/{id?}");
-
-            app.MapControllerRoute(
                 name: "employees",
                 pattern: "{controller = Employees}/{action=Index}/{id?}");
 
