@@ -3,6 +3,7 @@ using Althaus_Warehouse.Models.DTO.ItemDTOs;
 using Althaus_Warehouse.Models.Entities;
 using Althaus_Warehouse.Models;
 using Althaus_Warehouse.Services.ItemService;
+using Althaus_Warehouse.Services;
 
 namespace Althaus_Warehouse.Controllers
 {
@@ -15,11 +16,21 @@ namespace Althaus_Warehouse.Controllers
             _itemService = itemService ?? throw new ArgumentNullException(nameof(itemService));
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageSize = 4, int currentPage = 1)
         {
-            var items = await _itemService.GetAllItemsAsync();
+            var result = await _itemService.GetAllItemsAsync(pageSize, currentPage);
+            var items = result.Items; // Assuming this returns an IEnumerable<Item>
+            var totalCount = result.TotalCount; // Assuming this returns the total item count
+
+            ViewBag.PaginationMetaData = new PaginationMetaData(totalCount, pageSize, currentPage);
+
             return View(items);
         }
+
+
+
+
+
 
 
         public IActionResult Create()

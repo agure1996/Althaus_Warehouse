@@ -23,14 +23,25 @@ namespace Althaus_Warehouse.Services.Repositories
         public ItemRepository(WarehouseDbContext context) =>
             _context = context ?? throw new ArgumentNullException(nameof(context));
 
+
         /// <inheritdoc/>
-        public async Task<IEnumerable<Item>> GetAllItemsAsync()
+        public async Task<(IEnumerable<Item> Items, int TotalCount)> GetAllItemsAsync(int pageSize, int currentPage)
         {
-            return await _context.Items
-                .Include(i => i.CreatedBy) // Include the CreatedBy property
-                .Include(i => i.ItemType) // Optionally include ItemType if needed
+            var totalCount = await _context.Items.CountAsync();
+            var items = await _context.Items
+                .Include(item => item.ItemType) // Ensure the ItemType is included
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            return (items, totalCount);
         }
+
+
+
+
+
+
 
 
         /// <inheritdoc/>

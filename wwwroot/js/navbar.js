@@ -13,10 +13,10 @@ const updateNavItems = (userRole) => {
     navItems.innerHTML = ''; // Clear existing items
 
     // Always display "Home" and "Test" links, regardless of user role
-    navItems.innerHTML += `
-        <li class="nav-item"><a class="nav-link" href="/Home">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="/Test">Test</a></li>
-    `;
+    //navItems.innerHTML += `
+    //    <li class="nav-item"><a class="nav-link" href="/Home">Home</a></li>
+    //    <li class="nav-item"><a class="nav-link" href="/Test">Test</a></li>
+    //`;
 
     if (userRole) {
         // If the user has certain roles, show additional dropdowns

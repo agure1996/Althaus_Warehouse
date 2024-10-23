@@ -19,10 +19,13 @@ namespace Althaus_Warehouse.Services.ItemService
             return await _itemRepository.GetItemByIdAsync(itemId);
         }
 
-        public async Task<IEnumerable<Item>> GetAllItemsAsync()
+        public async Task<(IEnumerable<Item> Items, int TotalCount)> GetAllItemsAsync(int pageSize, int currentPage)
         {
-            return await _itemRepository.GetAllItemsAsync();
+            return await _itemRepository.GetAllItemsAsync(pageSize, currentPage);
         }
+
+
+
 
         public async Task CreateItemAsync(Item item)
         {

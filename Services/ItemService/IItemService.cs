@@ -8,7 +8,7 @@ namespace Althaus_Warehouse.Services.ItemService
     public interface IItemService
     {
         Task<Item?> GetItemByIdAsync(int itemId);
-        Task<IEnumerable<Item>> GetAllItemsAsync();
+        Task<(IEnumerable<Item> Items, int TotalCount)> GetAllItemsAsync(int pageSize, int currentPage);
         Task CreateItemAsync(Item item);
         Task UpdateItemAsync(int itemId, UpdateItemDTO itemDTO);
         Task DeleteItemAsync(int itemId);

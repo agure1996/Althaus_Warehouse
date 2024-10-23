@@ -7,12 +7,12 @@ namespace Althaus_Warehouse.Services.Repositories
     /// </summary>
     public interface IItemRepository
     {
+
         /// <summary>
         /// Retrieves all items in the warehouse.
         /// </summary>
         /// <returns>A list of <see cref="Item"/> objects.</returns>
-        Task<IEnumerable<Item>> GetAllItemsAsync();
-
+        Task<(IEnumerable<Item> Items, int TotalCount)> GetAllItemsAsync(int pageSize, int currentPage);
         /// <summary>
         /// Retrieves a specific item by its unique identifier.
         /// </summary>

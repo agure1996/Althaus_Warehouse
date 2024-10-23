@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<Althaus_Warehouse.Models.Entities.Item>
-
 @{
-    ViewData["Title"] = "Item List";
+    var paginationMetaData = ViewBag.PaginationMetaData as Althaus_Warehouse.Services.PaginationMetaData;
 }
 
 <h1>Item List</h1>
@@ -15,8 +14,7 @@
             <th>Name</th>
             <th>Description</th>
             <th>Quantity</th>
-            <th>PPU</th>
-            <th>Created By</th>
+            <th>£ Per Unit</th>
             <th>Item Type</th>
             <th>Date Created</th>
             <th>Actions</th>
@@ -31,8 +29,7 @@
                 <td>@item.Description</td>
                 <td>@item.Quantity</td>
                 <td>@item.Price</td>
-                <td>@item.CreatedBy?.GetFullName()</td>
-                <td>@item.ItemType.Name.ToString()</td>
+                <td>@item.ItemType?.Name</td>
                 <td>@item.DateCreated.ToString("dd MM yyyy")</td>
                 <td>
                     <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
@@ -43,3 +40,34 @@
         }
     </tbody>
 </table>
+
+<!-- Pagination Controls -->
+<div class="pagination">
+    @if (paginationMetaData != null)
+    {
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @if (paginationMetaData.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="Index" asp-route-pageSize="@paginationMetaData.PageSize" asp-route-currentPage="@(paginationMetaData.CurrentPage - 1)">Previous</a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= paginationMetaData.TotalPageCount; i++)
+                {
+                    <li class="page-item @(i == paginationMetaData.CurrentPage ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-pageSize="@paginationMetaData.PageSize" asp-route-currentPage="@i">@i</a>
+                    </li>
+                }
+
+                @if (paginationMetaData.CurrentPage < paginationMetaData.TotalPageCount)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="Index" asp-route-pageSize="@paginationMetaData.PageSize" asp-route-currentPage="@(paginationMetaData.CurrentPage + 1)">Next</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>
