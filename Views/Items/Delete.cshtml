@@ -1,0 +1,12 @@
+﻿@model Althaus_Warehouse.Models.Entities.Item
+
+<h3>Are you sure you want to delete this item?</h3>
+<div>
+    <p>Item Name: @Model.Name</p>
+    <p>Item ID: @Model.Id</p>
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit">Yes, Delete</button>
+        <a asp-action="Index">Cancel</a>
+    </form>
+</div>

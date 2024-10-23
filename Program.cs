@@ -1,6 +1,7 @@
 using Althaus_Warehouse.DBContext;
 using Althaus_Warehouse.Services;
 using Althaus_Warehouse.Services.AuthService;
+using Althaus_Warehouse.Services.ItemService;
 using Althaus_Warehouse.Services.Repositories;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -40,6 +41,7 @@ namespace Althaus_Warehouse
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IItemRepository, ItemRepository>();
             builder.Services.AddScoped<IItemTypeRepository, ItemTypeRepository>();
+            builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
             // Add AutoMapper for object mapping
@@ -136,6 +138,10 @@ namespace Althaus_Warehouse
             app.MapControllerRoute(
                 name: "employees",
                 pattern: "{controller = Employees}/{action=Index}/{id?}");
+
+            app.MapControllerRoute(
+                name: "items",
+                pattern: "{controller = Items}/{action=Index}/{id?}");
 
 
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Althaus_Warehouse.Models.DTO.ItemDTOs
+﻿namespace Althaus_Warehouse.Models.DTO.ItemDTOs
 {
     public class ItemTypeDTO
     {

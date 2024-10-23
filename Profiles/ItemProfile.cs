@@ -19,22 +19,19 @@ public class ItemProfile : Profile
 
         // Mapping from CreateItemDTO to Item
         CreateMap<CreateItemDTO, Item>()
-            .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateTime.UtcNow))
-            .ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById))
-            .ForMember(dest => dest.ItemType, opt => opt.Ignore()) // Ignore ItemType for now
+            .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateTime.UtcNow)) // Automatically set creation date
+            .ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById)) // Map CreatedById
+            .ForMember(dest => dest.ItemType, opt => opt.Ignore()) // Ignore the ItemType navigation property
             .AfterMap((src, dest) =>
             {
-                if (src.ItemTypeId != 0)
-                {
-                    dest.ItemTypeId = src.ItemTypeId; // Set ItemTypeId
-                }
+                dest.ItemTypeId = src.ItemTypeId; // Set ItemTypeId directly
             });
 
         // Mapping from UpdateItemDTO to Item
         CreateMap<UpdateItemDTO, Item>()
             .ForMember(dest => dest.CreatedById, opt => opt.Ignore()) // Ignore if not updating
-            .ForMember(dest => dest.DateCreated, opt => opt.Ignore()) // Ignore if not updating
-            .ForMember(dest => dest.ItemType, opt => opt.Ignore()) // Ignore the entire ItemType
+            .ForMember(dest => dest.DateCreated, opt => opt.Ignore()) // Keep existing DateCreated
+            .ForMember(dest => dest.ItemType, opt => opt.Ignore()) // Ignore ItemType navigation
             .ForMember(dest => dest.ItemTypeId, opt => opt.MapFrom(src => src.ItemTypeId)); // Directly map ItemTypeId
     }
 }

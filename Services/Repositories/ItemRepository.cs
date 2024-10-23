@@ -24,11 +24,14 @@ namespace Althaus_Warehouse.Services.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<Item>> GetAllItemsAsync() =>
-            // Retrieve all items from the database, including ItemType
-            await _context.Items
-                .Include(i => i.ItemType) // Ensure related ItemType is included
+        public async Task<IEnumerable<Item>> GetAllItemsAsync()
+        {
+            return await _context.Items
+                .Include(i => i.CreatedBy) // Include the CreatedBy property
+                .Include(i => i.ItemType) // Optionally include ItemType if needed
                 .ToListAsync();
+        }
+
 
         /// <inheritdoc/>
         public async Task<IEnumerable<Item>> GetItemsByCategoryAsync(int itemTypeId)

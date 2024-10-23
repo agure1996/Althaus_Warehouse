@@ -43,9 +43,8 @@ const updateNavItems = (userRole) => {
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itemsDropdown">
                         <li><a class="dropdown-item" href="/Items/Index">Get All Items</a></li>
-                        <li><a class="dropdown-item" href="/Items/GetById">Get Item by ID</a></li>
-                        <li><a class="dropdown-item" href="/Items/Create">Create Item</a></li> <!-- Correct link -->
-                        <li><a class="dropdown-item" href="/Items/Manage">Manage Item (Patch/Delete)</a></li>
+                        <li><a class="dropdown-item" href="/Items/SearchItemById">Get Item by ID</a></li>
+                        <li><a class="dropdown-item" href="/Items/Create">Create Item</a></li>
                     </ul>
                 </li>
             `;

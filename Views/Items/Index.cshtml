@@ -1,8 +1,45 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<Althaus_Warehouse.Models.Entities.Item>
+
+@{
+    ViewData["Title"] = "Item List";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Item List</h1>
+
+<a class="btn btn-primary" asp-action="Create">Create New Item</a>
+
+<table id="items-table" class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>PPU</th>
+            <th>Created By</th>
+            <th>Item Type</th>
+            <th>Date Created</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price</td>
+                <td>@item.CreatedBy?.GetFullName()</td>
+                <td>@item.ItemType.Name.ToString()</td>
+                <td>@item.DateCreated.ToString("dd MM yyyy")</td>
+                <td>
+                    <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">View Details</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
