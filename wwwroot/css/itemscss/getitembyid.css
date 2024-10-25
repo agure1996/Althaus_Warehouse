@@ -1,51 +1,21 @@
 ﻿/* getitembyid.css */
 
-h2 {
+h1 {
     font-size: 2rem; /* Larger font for the main heading */
     margin-bottom: 20px; /* Spacing below the heading */
 }
 
-form {
+#itemForm {
     margin-bottom: 20px; /* Space below the form */
-    display: flex; /* Use flexbox for layout */
-    flex-direction: column; /* Stack items vertically */
-    max-width: 600px; /* Limit the form width for better readability */
-    margin: auto; /* Center the form on the page */
 }
 
-div {
-    margin-bottom: 15px; /* Space between form groups */
+.form-inline .form-group {
+    margin-right: 10px; /* Space between inline form elements */
 }
 
-label {
-    font-weight: bold; /* Make labels bold */
-    margin-bottom: 5px; /* Spacing below labels */
+.btn-primary {
+    margin-left: 5px; /* Small left margin for the button */
 }
-
-input[type="number"],
-input[type="text"],
-select {
-    width: 100%; /* Full width inputs */
-    padding: 10px; /* Padding for inputs */
-    border: 1px solid #ccc; /* Border style */
-    border-radius: 4px; /* Rounded corners */
-    font-size: 1rem; /* Font size for inputs */
-}
-
-button {
-    background-color: #007bff; /* Bootstrap primary color */
-    color: white; /* Button text color */
-    border: none; /* No border */
-    padding: 10px 20px; /* Padding for button */
-    border-radius: 4px; /* Rounded corners */
-    cursor: pointer; /* Pointer on hover */
-    font-size: 1rem; /* Font size for button */
-    margin-top: 10px; /* Space above the button */
-}
-
-    button:hover {
-        background-color: #0056b3; /* Darker shade on hover */
-    }
 
 .text-danger {
     color: #dc3545; /* Bootstrap danger color for validation messages */

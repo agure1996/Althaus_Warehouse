@@ -6,15 +6,19 @@
 
 <h2>Search Item By ID</h2>
 
-<form id="itemForm" asp-action="GetItemById" method="get">
-    <div>
-        <label for="itemId">Enter Item ID:</label>
-        <input type="number" id="itemId" name="id" required />
-    </div>
-    <button type="submit">Search</button>
-</form>
+<div>
+    <form id="itemForm" class="form-inline mb-3" asp-action="GetItemById" method="get">
+        <div class="form-group">
+            <label for="itemId" class="sr-only">Enter Item ID:</label>
+            <input type="number" id="itemId" name="id" class="form-control mr-2" placeholder="Item ID" min="1" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Search Item</button>
 
-<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <!-- Button to go back to the item list -->
+        <a asp-action="Index" class="btn btn-secondary ml-2">Back to Item List</a>
+    </form>
+</div>
 
 <!-- Include the JS script -->
 <script src="~/js/itemsjs/item.js"></script>
+
