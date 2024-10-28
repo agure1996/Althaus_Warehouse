@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Althaus_Warehouse", "Althaus_Warehouse.csproj", "{A36B892E-1F0D-42BA-B383-D8D5B5250D3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Althaus_Warehouse.Tests", "..\Althaus_Warehouse.Tests\Althaus_Warehouse.Tests.csproj", "{9F17F84C-5D99-4798-B1D6-A1F999EEFAD7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A36B892E-1F0D-42BA-B383-D8D5B5250D3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A36B892E-1F0D-42BA-B383-D8D5B5250D3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A36B892E-1F0D-42BA-B383-D8D5B5250D3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F17F84C-5D99-4798-B1D6-A1F999EEFAD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F17F84C-5D99-4798-B1D6-A1F999EEFAD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F17F84C-5D99-4798-B1D6-A1F999EEFAD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F17F84C-5D99-4798-B1D6-A1F999EEFAD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
