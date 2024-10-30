@@ -3,9 +3,11 @@ using Althaus_Warehouse.Models.DTO.EmployeeDTOs;
 using Althaus_Warehouse.Services;
 using Althaus_Warehouse.Models.Entities;
 using Althaus_Warehouse.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Althaus_Warehouse.Controllers
 {
+    [Authorize(Policy = "RequireManager")]
     public class EmployeesController : Controller
     {
         private readonly IEmployeeService _employeeService;

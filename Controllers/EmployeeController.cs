@@ -11,7 +11,7 @@ namespace Althaus_Warehouse.Controllers
     /// Controller to manage operations related to employees in the warehouse.
     /// </summary>
     [Route("api/v{version:apiVersion}/employees")]
-    [Authorize(Roles = "manager")]
+    [Authorize(Policy = "RequireManager")]
     [Asp.Versioning.ApiVersion(1.0)]
     [ApiController]
     public class EmployeeController : ControllerBase
