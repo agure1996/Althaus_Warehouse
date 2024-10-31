@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Althaus_Warehouse.Controllers
 {
-    [Authorize(Policy = "RequireManager")]
+
     public class EmployeesController : Controller
     {
         private readonly IEmployeeService _employeeService;
@@ -48,6 +48,7 @@ namespace Althaus_Warehouse.Controllers
         // Controller Action to Fetch Employee by ID
         // GET: Employees/GetEmployeeById/{id}
         [HttpGet]
+
         public async Task<IActionResult> GetEmployeeById(int id)
         {
             if (id <= 0) // Handle case when id is 0 or negative

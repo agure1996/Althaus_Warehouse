@@ -25,23 +25,6 @@ namespace Althaus_Warehouse.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        //[HttpGet]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //public async Task<ActionResult<IEnumerable<GetItemDTO>>> GetAllItems()
-        //{
-        //    try
-        //    {
-        //        var items = await _itemRepository.GetAllItemsAsync();
-        //        var itemDTOs = _mapper.Map<IEnumerable<GetItemDTO>>(items);
-        //        return Ok(itemDTOs);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error retrieving all items.");
-        //        return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
-        //    }
-        //}
-
         [HttpGet("{id}", Name = "GetItemById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

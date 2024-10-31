@@ -22,17 +22,18 @@ public class AuthService : IAuthService
 
     public string GenerateToken(string email, string role)
     {
-        var claims = new List<Claim>
-            {
-                new Claim("name", email),
-                new Claim("Role", role)
-            };
 
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
 
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+        var claims = new List<Claim>
+            {
+                new Claim("name", email),
+                new Claim("Role", role)
+            };
+      
         var token = new JwtSecurityToken(
             issuer: "http://localhost:5168/",
             audience: "althauswarehouse",

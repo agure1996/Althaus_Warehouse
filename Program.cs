@@ -6,6 +6,7 @@ using Althaus_Warehouse.Services.Repositories;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
@@ -76,26 +77,53 @@ namespace Althaus_Warehouse
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["Authentication:Issuer"],
-                    ValidAudience = builder.Configuration["Authentication:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:SecretKey"])),
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
+             .AddJwtBearer(options =>
+             {
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuer = true,
+                     ValidateAudience = true,
+                     ValidateLifetime = true,
+                     ValidateIssuerSigningKey = true,
+                     ValidIssuer = builder.Configuration["Authentication:Issuer"],
+                     ValidAudience = builder.Configuration["Authentication:Audience"],
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:SecretKey"])),
+                     ClockSkew = TimeSpan.Zero
+                 };
+
+                 // Customizing the challenge response so that it redirects
+                 options.Events = new JwtBearerEvents
+                 {
+                     OnChallenge = context =>
+                     {
+                         // Prevent the default response for authorization challenges
+                         context.HandleResponse();
+
+                         //if user is unauthorized
+                         if (context.AuthenticateFailure != null)
+                         {
+                             context.Response.Redirect("/Home/Index"); // we redirect them to homepage
+                         }
+
+                         return Task.CompletedTask;
+                     },
+                     OnForbidden = context =>
+                     {
+                         // also handle forbidden responses
+                         context.Response.Redirect("/Home/Index"); // Redirect to homepage on forbidden access
+                         return Task.CompletedTask;
+                     }
+                 };
+             });
+
 
             // Adding authorization
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("RequireManager", policy => policy.RequireClaim("Role", "Manager"));
+                options.AddPolicy("RequireManager", policy =>
+                    policy.RequireClaim("Role", "Manager")); // Adjust based on how roles are stored
             });
+
 
             // Add services to the container (including MVC for views)
             builder.Services.AddControllersWithViews(); // This is crucial for Razor views

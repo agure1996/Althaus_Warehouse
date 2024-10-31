@@ -6,10 +6,10 @@ using Althaus_Warehouse.Services.ItemService;
 using Althaus_Warehouse.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using Asp.Versioning;
 
 namespace Althaus_Warehouse.Controllers
 {
-    
     public class ItemsController : Controller
     {
         private readonly IItemService _itemService;
@@ -50,7 +50,7 @@ namespace Althaus_Warehouse.Controllers
             return Ok(item); // Change this line to return JSON
         }
 
-        [Authorize(Policy = "RequireManager")]
+ 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -61,7 +61,7 @@ namespace Althaus_Warehouse.Controllers
             return View();
         }
 
-        [Authorize(Policy = "RequireManager")]
+       
         [HttpPost]
         public async Task<IActionResult> Create(CreateItemDTO itemDTO)
         {
@@ -81,7 +81,7 @@ namespace Althaus_Warehouse.Controllers
 
 
 
-        [Authorize(Policy = "RequireManager")]
+       
         public async Task<IActionResult> Delete(int id)
         {
             var item = await _itemService.GetItemByIdAsync(id);
@@ -91,7 +91,7 @@ namespace Althaus_Warehouse.Controllers
             }
             return View(item);
         }
-        [Authorize(Policy = "RequireManager")]
+        
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -117,7 +117,7 @@ namespace Althaus_Warehouse.Controllers
         }
 
 
-        [Authorize(Policy = "RequireManager")]
+    
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
@@ -151,7 +151,7 @@ namespace Althaus_Warehouse.Controllers
 
 
 
-        [Authorize(Policy = "RequireManager")]
+        
         [HttpPost]
         public async Task<IActionResult> Update(int id, UpdateItemDTO itemDTO)
         {

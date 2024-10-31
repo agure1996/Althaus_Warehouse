@@ -35,16 +35,15 @@ const handleLogin = async (formData) => {
         if (data.token) {
             localStorage.setItem('token', data.token); // Store the token in localStorage
 
-            // Parse JWT token to extract the user's role
-            const userRole = parseJwt(data.token).role;
+            // Parse JWT token to extract the user's role and name
+            const userRole = parseJwt(data.token)["Role"]; // Extract 'Role' claim
+            const userName = parseJwt(data.token)["name"]; // Extract 'name' claim
 
             // Update the navigation items based on the user's role
             updateNavItems(userRole);
 
-            // Reload the current page to reflect the logged-in state
-            window.location.reload();
-
-            // Redirect to the home page
+            // Alert the user and redirect to the home page
+            alert(`Welcome back ${userName}!`); // Using userName extracted from the token
             window.location.href = "/Home";
         } else {
             // Show an alert if no token was returned, indicating login failure
@@ -83,8 +82,3 @@ if (form) {
         await handleLogin(formData);
     });
 }
-
-/**
- * parseJwt function was removed from this file because it is now handled in the navbar.js
- * to avoid duplication of logic across multiple scripts.
- */
