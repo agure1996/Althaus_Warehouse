@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Althaus_Warehouse.Models.DTO.ItemDTOs.GetItemDTO;
+@{
     ViewData["Title"] = "Search Item By ID";
 }
 
@@ -7,7 +8,7 @@
 <h2>Search Item By ID</h2>
 
 <div>
-    <form id="itemForm" class="form-inline mb-3" asp-action="GetItemById" method="get">
+    <form id="itemForm" class="form-inline mb-3" asp-action="SearchItemById" method="get">
         <div class="form-group">
             <label for="itemId" class="sr-only">Enter Item ID:</label>
             <input type="number" id="itemId" name="id" class="form-control mr-2" placeholder="Item ID" min="1" required />

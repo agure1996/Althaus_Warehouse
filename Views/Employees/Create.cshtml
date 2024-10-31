@@ -40,6 +40,56 @@
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
 
+<script>
+
+    // Handle form submission for creating a new employee
+    document.getElementById('employeeForm').addEventListener('submit', async function (e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        // Gather form data for employee creation
+        const firstName = document.getElementById('FirstName').value;
+        const lastName = document.getElementById('LastName').value;
+        const email = document.getElementById('Email').value;
+        const password = document.getElementById('Password').value; // Get password from the form
+        const employeeType = document.getElementById('EmployeeType').value;
+
+        // Raw employee data object
+        const rawEmployeeData = {
+            FirstName: firstName,
+            LastName: lastName,
+            Email: email,
+            Password: password, // Include the password in the raw data
+            EmployeeType: employeeType
+        };
+
+        // Sanitize the data
+        const sanitizedData = sanitizeEmployeeData(rawEmployeeData);
+        console.log("Sanitized data to send to backend:", sanitizedData);
+
+        try {
+            const response = await fetch('/Employees/Create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify(sanitizedData),
+            });
+
+            if (!response.ok) {
+                const errorDetails = await response.text(); // Get detailed error message
+                throw new Error(`Failed to create employee: ${response.statusText} - ${errorDetails}`);
+            }
+
+            alert("Employee created successfully.");
+            window.location.href = "/Employees/Index";
+
+        } catch (error) {
+            console.error('Error creating employee:', error);
+            alert("An error occurred during creation. Please try again.");
+        }
+    });
+    </script>
 
 <!-- Include your JavaScript file -->
 <script src="~/js/employeesjs/employee.js"></script>

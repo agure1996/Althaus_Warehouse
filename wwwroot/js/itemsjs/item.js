@@ -1,12 +1,12 @@
-﻿document.getElementById('logoutButton').addEventListener('click', () => {
-    logout();
-});
+﻿
 // Function to fetch item by ID
 const fetchItemById = async (itemId) => {
     const token = localStorage.getItem('token');
     if (!token) {
         alert("You must be logged in to perform this action.");
-        logout();
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            logout();
+        });
     }
 
     try {

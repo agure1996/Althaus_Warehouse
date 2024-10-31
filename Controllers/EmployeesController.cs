@@ -42,7 +42,7 @@ namespace Althaus_Warehouse.Controllers
         [HttpGet]
         public IActionResult SearchEmployeeById()
         {
-            return View(); // This renders the search form to input employee ID
+            return View(); 
         }
 
         // Controller Action to Fetch Employee by ID
@@ -98,6 +98,7 @@ namespace Althaus_Warehouse.Controllers
 
 
         // GET: Employees/Delete/{id}
+
         public async Task<IActionResult> Delete(int id)
         {
             var employee = await _employeeService.GetEmployeeByIdAsync(id);
@@ -109,7 +110,7 @@ namespace Althaus_Warehouse.Controllers
             await _employeeService.DeleteEmployeeAsync(id);
 
             // Redirect to the index action after successful deletion
-            return RedirectToAction(nameof(Index));
+            return View(employee);
         }
 
 
@@ -136,7 +137,7 @@ namespace Althaus_Warehouse.Controllers
             {
                 return NotFound();
             }
-            return View(employee); // Make sure you create a Details view for this
+            return View(employee);
         }
 
 
@@ -156,7 +157,7 @@ namespace Althaus_Warehouse.Controllers
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 Email = employee.Email,
-                EmployeeType = employee.EmployeeType.ToString() // Convert Enum to string for the dropdown
+                EmployeeType = employee.EmployeeType.ToString() // Converted to Enum to string for the dropdown
             };
 
             ViewBag.EmployeeTypes = Enum.GetValues(typeof(EmployeeType))

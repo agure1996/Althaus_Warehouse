@@ -6,7 +6,6 @@ using Althaus_Warehouse.Services.Repositories;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
@@ -126,7 +125,7 @@ namespace Althaus_Warehouse
 
 
             // Add services to the container (including MVC for views)
-            builder.Services.AddControllersWithViews(); // This is crucial for Razor views
+            builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 
@@ -136,11 +135,11 @@ namespace Althaus_Warehouse
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            //middleware positioning
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            //app.UseCors("AllowAll"); // Use the CORS policy
+            app.UseCors("AllowAll"); 
             app.UseAuthentication();
             app.UseAuthorization();
 

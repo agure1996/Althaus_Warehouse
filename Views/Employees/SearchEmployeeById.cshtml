@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Althaus_Warehouse.Models.DTO.EmployeeDTOs.EmployeeDTO;
+@{
     ViewData["Title"] = "Get Employee by ID";
 }
 
@@ -7,14 +8,12 @@
 <h1>Get Employee by ID</h1>
 
 <div>
-    <form id="employeeForm" class="form-inline mb-3">
+    <form id="searchEmployeeForm" class="form-inline mb-3" asp-action="SearchEmployeeById" method="get">
         <div class="form-group">
             <label for="employeeId" class="sr-only">Enter Employee ID:</label>
             <input type="number" id="employeeId" class="form-control mr-2" placeholder="Employee ID" min="1" required />
         </div>
         <button type="submit" class="btn btn-primary">Search Employee</button>
-
-        <!-- Button to go back to the item list -->
         <a class="btn btn-secondary" href="/Employees/Index">Back to Employee List</a>
     </form>
 </div>

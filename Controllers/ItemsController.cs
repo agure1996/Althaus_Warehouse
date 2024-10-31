@@ -22,8 +22,8 @@ namespace Althaus_Warehouse.Controllers
         public async Task<IActionResult> Index(int pageSize = 4, int currentPage = 1)
         {
             var result = await _itemService.GetAllItemsAsync(pageSize, currentPage);
-            var items = result.Items; // Assuming this returns an IEnumerable<Item>
-            var totalCount = result.TotalCount; // Assuming this returns the total item count
+            var items = result.Items; 
+            var totalCount = result.TotalCount;
 
             ViewBag.PaginationMetaData = new PaginationMetaData(totalCount, pageSize, currentPage);
 
@@ -35,7 +35,7 @@ namespace Althaus_Warehouse.Controllers
         [HttpGet]
         public IActionResult SearchItemById()
         {
-            return View(); // This renders the search form to input employee ID
+            return View();
         }
 
         [HttpGet]
@@ -47,16 +47,16 @@ namespace Althaus_Warehouse.Controllers
                 return NotFound();
             }
 
-            return Ok(item); // Change this line to return JSON
+            return Ok(item); 
         }
 
  
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            // Retrieve all item types to populate the dropdown
+            
             var itemTypes = await _itemService.GetAllItemTypesAsync();
-            ViewBag.ItemTypes = new SelectList(itemTypes, "Id", "Name"); // Prepare item types for view
+            ViewBag.ItemTypes = new SelectList(itemTypes, "Id", "Name");
 
             return View();
         }
