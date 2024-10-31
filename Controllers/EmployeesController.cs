@@ -69,15 +69,12 @@ namespace Althaus_Warehouse.Controllers
 
 
 
-
-
         // POST: Employees/Create
         [HttpPost]
-        public async Task<IActionResult> Create(CreateEmployeeDTO employeeDTO)
+        public async Task<IActionResult> Create([FromBody] CreateEmployeeDTO employeeDTO)
         {
             if (ModelState.IsValid)
             {
-                // Map DTO to Employee entity
                 var employee = new Employee
                 {
                     FirstName = employeeDTO.FirstName,
@@ -88,20 +85,15 @@ namespace Althaus_Warehouse.Controllers
                 };
 
                 await _employeeService.CreateEmployeeAsync(employee);
-                return RedirectToAction(nameof(Index)); // Adjust as necessary
+
+                return Ok(new { redirectUrl = Url.Action(nameof(Index), "Employees") });
             }
 
-            // If model state is invalid, return the view with the current model to show validation errors
-            ViewBag.EmployeeTypes = Enum.GetValues(typeof(EmployeeType))
-                .Cast<EmployeeType>()
-                .Select(e => new
-                {
-                    Value = e.ToString(),
-                    Text = e.ToString()
-                }).ToList();
-
-            return View(employeeDTO);
+            // Log validation errors for debugging
+            var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+            return BadRequest(new { Errors = errors });
         }
+
 
         // GET: Employees/Delete/{id}
         public async Task<IActionResult> Delete(int id)
@@ -109,9 +101,13 @@ namespace Althaus_Warehouse.Controllers
             var employee = await _employeeService.GetEmployeeByIdAsync(id);
             if (employee == null)
             {
-                return NotFound();
+                return NotFound(); // Employee not found, handle appropriately
             }
-            return View(employee); // Assuming you have a view for confirming deletion
+
+            await _employeeService.DeleteEmployeeAsync(id);
+
+            // Redirect to the index action after successful deletion
+            return RedirectToAction(nameof(Index));
         }
 
 

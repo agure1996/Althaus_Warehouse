@@ -1,14 +1,17 @@
-﻿document.getElementById('logoutButton').addEventListener('click', () => {
-    logout(); 
-});
-
+﻿
 
 // Function to fetch employee by ID
 const fetchEmployeeById = async (employeeId) => {
+
+  
+
     const token = localStorage.getItem('token');
     if (!token) {
+
         alert("You must be logged in to perform this action.");
-        logout();
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            logout();
+        });
     }
     try {
         const response = await fetch(`/Employees/GetEmployeeById?id=${employeeId}`, {
@@ -59,6 +62,7 @@ const fetchEmployeeById = async (employeeId) => {
 // Handle form submission
 document.getElementById('employeeForm').addEventListener('submit', async function (e) {
     e.preventDefault(); // Prevent the default form submission
+
 
     const employeeId = document.getElementById('employeeId').value;
 
