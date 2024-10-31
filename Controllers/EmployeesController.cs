@@ -68,30 +68,32 @@ namespace Althaus_Warehouse.Controllers
         }
 
 
-
         // POST: Employees/Create
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateEmployeeDTO employeeDTO)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var employee = new Employee
-                {
-                    FirstName = employeeDTO.FirstName,
-                    LastName = employeeDTO.LastName,
-                    Email = employeeDTO.Email,
-                    EmployeeType = Enum.Parse<EmployeeType>(employeeDTO.EmployeeType),
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(employeeDTO.Password)
-                };
-
-                await _employeeService.CreateEmployeeAsync(employee);
-
-                return Ok(new { redirectUrl = Url.Action(nameof(Index), "Employees") });
+                // Log validation errors for debugging
+                var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return BadRequest(new { Errors = errors }); // Return 400 with validation errors
             }
 
-            // Log validation errors for debugging
-            var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
-            return BadRequest(new { Errors = errors });
+            // Create the employee object
+            var employee = new Employee
+            {
+                FirstName = employeeDTO.FirstName,
+                LastName = employeeDTO.LastName,
+                Email = employeeDTO.Email,
+                EmployeeType = Enum.Parse<EmployeeType>(employeeDTO.EmployeeType),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(employeeDTO.Password) // Ensure Password is part of DTO
+            };
+
+            // Call service to create employee
+            await _employeeService.CreateEmployeeAsync(employee);
+
+            // Return success response with redirect URL
+            return Ok(new { redirectUrl = Url.Action(nameof(Index), "Employees") });
         }
 
 

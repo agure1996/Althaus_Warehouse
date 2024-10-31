@@ -63,14 +63,48 @@ const fetchEmployeeById = async (employeeId) => {
 document.getElementById('employeeForm').addEventListener('submit', async function (e) {
     e.preventDefault(); // Prevent the default form submission
 
+    const firstName = document.getElementById('FirstName').value;
+    const lastName = document.getElementById('LastName').value;
+    const email = document.getElementById('Email').value;
+    const password = document.getElementById('Password').value;
+    const employeeType = document.getElementById('EmployeeType').value;
 
-    const employeeId = document.getElementById('employeeId').value;
-
-    if (!employeeId || employeeId <= 0) {
-        alert("Please enter a valid employee ID.");
-        return; // Stop if no employee ID is provided
+    // Basic validation
+    if (!firstName || !lastName || !email || !password || !employeeType) {
+        alert("All fields are required.");
+        return; // Stop if any field is empty
     }
 
-    // Fetch employee by ID
-    await fetchEmployeeById(employeeId);
+    // Create employee DTO object
+    const employeeDTO = {
+        FirstName: firstName,
+        LastName: lastName,
+        Email: email,
+        Password: password,
+        EmployeeType: employeeType
+    };
+
+    try {
+        const response = await fetch('/Employees/Create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Ensure you're sending JSON
+            },
+            body: JSON.stringify(employeeDTO)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.Errors.join(', ')}`);
+            return; // Handle server validation errors
+        }
+
+        // Handle successful creation
+        const data = await response.json();
+        alert('Employee created successfully!'); // Optional success message
+        window.location.href = data.redirectUrl; // Redirect to the Index
+    } catch (error) {
+        console.error('Error creating employee:', error);
+        alert("An error occurred while creating the employee. Please try again later.");
+    }
 });
