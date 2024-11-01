@@ -28,17 +28,6 @@ namespace Althaus_Warehouse.Controllers
         }
 
 
-        [HttpPost]
-        public IActionResult Create(Employee employee)
-        {
-            if (ModelState.IsValid)
-            {
-                // Logic to save the employee to the database
-                return RedirectToAction("Index"); // Redirect to a different action to avoid loops
-            }
-            return Create(employee); // Return to the same view if validation fails
-        }
-
         /// <summary>
         /// Retrieves a list of all employees in the warehouse.
         /// </summary>

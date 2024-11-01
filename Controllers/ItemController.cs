@@ -4,6 +4,7 @@ using Althaus_Warehouse.Services.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Althaus_Warehouse.Models.DTO.EmployeeDTOs;
 
 namespace Althaus_Warehouse.Controllers
 {
@@ -23,6 +24,41 @@ namespace Althaus_Warehouse.Controllers
             _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository));
             _itemTypeRepository = itemTypeRepository ?? throw new ArgumentNullException(nameof(itemTypeRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        }
+
+
+        /// <summary>
+        /// Retrieves a list of all items in the warehouse.
+        /// </summary>
+        /// <returns>A list of Items as <see cref="GetItemDTO"/>.</returns>
+        /// <response code="200">Returns the list of items.</response>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<(IEnumerable<GetItemDTO> Items, int TotalCount)>> GetAllItems( int pageSize = 4, int currentPage = 1)
+        {
+            if (pageSize <= 0)
+            {
+                return BadRequest("Page size must be greater than zero.");
+            }
+
+            if (currentPage <= 0)
+            {
+                return BadRequest("Current page must be greater than zero.");
+            }
+
+            try
+            {
+                var (items, totalCount) = await _itemRepository.GetAllItemsAsync(pageSize, currentPage);
+                var itemDTOs = _mapper.Map<IEnumerable<GetItemDTO>>(items);
+
+                var result = (Items: itemDTOs, TotalCount: totalCount);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving all items.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
 
         [HttpGet("{id}", Name = "GetItemById")]

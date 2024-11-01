@@ -1,18 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Althaus_Warehouse.Models.DTO.ItemDTOs;
-using Althaus_Warehouse.Models.Entities;
 using Althaus_Warehouse.Models;
 using Althaus_Warehouse.Services.ItemService;
 using Althaus_Warehouse.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Authorization;
-using Asp.Versioning;
 
 namespace Althaus_Warehouse.Controllers
 {
     public class ItemsController : Controller
     {
         private readonly IItemService _itemService;
+
 
         public ItemsController(IItemService itemService)
         {
