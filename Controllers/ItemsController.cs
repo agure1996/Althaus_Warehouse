@@ -2,15 +2,14 @@
 using Althaus_Warehouse.Models.DTO.ItemDTOs;
 using Althaus_Warehouse.Models;
 using Althaus_Warehouse.Services.ItemService;
-using Althaus_Warehouse.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Althaus_Warehouse.Services;
 
 namespace Althaus_Warehouse.Controllers
 {
     public class ItemsController : Controller
     {
         private readonly IItemService _itemService;
-
 
         public ItemsController(IItemService itemService)
         {
@@ -20,15 +19,13 @@ namespace Althaus_Warehouse.Controllers
         public async Task<IActionResult> Index(int pageSize = 4, int currentPage = 1)
         {
             var result = await _itemService.GetAllItemsAsync(pageSize, currentPage);
-            var items = result.Items; 
+            var items = result.Items;
             var totalCount = result.TotalCount;
 
             ViewBag.PaginationMetaData = new PaginationMetaData(totalCount, pageSize, currentPage);
 
             return View(items);
         }
-
-
 
         [HttpGet]
         public IActionResult SearchItemById()
@@ -45,28 +42,31 @@ namespace Althaus_Warehouse.Controllers
                 return NotFound();
             }
 
-            return Ok(item); 
+            return Ok(item);
         }
 
- 
+        // GET: Create a new item
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            
+            // Fetching all item types to populate the dropdown
             var itemTypes = await _itemService.GetAllItemTypesAsync();
             ViewBag.ItemTypes = new SelectList(itemTypes, "Id", "Name");
 
             return View();
         }
 
-       
+        // POST: Create a new item
         [HttpPost]
         public async Task<IActionResult> Create(CreateItemDTO itemDTO)
         {
+            // Check if the model state is valid
             if (ModelState.IsValid)
             {
-                // Call the service method with the DTO directly
-                await _itemService.CreateItemAsync(itemDTO);
+                // Call the service to create the item using the provided DTO
+                var createdItem = await _itemService.CreateItemAsync(itemDTO);
+
+                // Redirect to the Index action after successful creation
                 return RedirectToAction(nameof(Index));
             }
 
@@ -74,12 +74,10 @@ namespace Althaus_Warehouse.Controllers
             var itemTypes = await _itemService.GetAllItemTypesAsync();
             ViewBag.ItemTypes = new SelectList(itemTypes, "Id", "Name");
 
-            return View(itemDTO); // Re-render the form with validation errors
+            // Re-render the form with validation errors
+            return View(itemDTO);
         }
 
-
-
-       
         public async Task<IActionResult> Delete(int id)
         {
             var item = await _itemService.GetItemByIdAsync(id);
@@ -89,7 +87,7 @@ namespace Althaus_Warehouse.Controllers
             }
             return View(item);
         }
-        
+
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -114,8 +112,6 @@ namespace Althaus_Warehouse.Controllers
             return View(item);
         }
 
-
-    
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
@@ -147,9 +143,6 @@ namespace Althaus_Warehouse.Controllers
             return View(itemDTO);
         }
 
-
-
-        
         [HttpPost]
         public async Task<IActionResult> Update(int id, UpdateItemDTO itemDTO)
         {
@@ -182,16 +175,5 @@ namespace Althaus_Warehouse.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
-
-
-
-
-
-
-
-
-
-
     }
 }

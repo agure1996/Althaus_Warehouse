@@ -83,6 +83,7 @@ namespace Althaus_Warehouse.Services.Repositories
             // Ensure DateCreated is set when adding the item
             item.DateCreated = DateTime.UtcNow;
             await _context.Items.AddAsync(item);
+            await _context.SaveChangesAsync();
         }
 
         /// <inheritdoc/>

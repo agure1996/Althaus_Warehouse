@@ -12,7 +12,7 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         /// <summary>
         /// Gets or sets the unique identifier for the item.
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; set; } 
 
         /// <summary>
         /// Gets or sets the name of the item.
@@ -42,7 +42,7 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         /// <summary>
         /// Gets or sets the type/category of the item.
         /// </summary>
-        public ItemTypeDTO? ItemType { get; set; } 
+        public ItemTypeDTO? ItemType { get; set; }
 
         /// <summary>
         /// Gets or sets stock status of item.

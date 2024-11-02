@@ -16,8 +16,8 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         public int Quantity { get; set; }
 
         [Required(ErrorMessage = "Price is required.")]
-        //[Range(0.0, Double.MaxValue, ErrorMessage = "The field {0} must be greater than {1}.")]
-        public decimal Price { get; set; } 
+        [Range(0.01, double.MaxValue, ErrorMessage = "The price must be greater than zero.")]
+        public decimal Price { get; set; }
 
         public int? CreatedById { get; set; }
 
