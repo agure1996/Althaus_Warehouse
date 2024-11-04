@@ -1,7 +1,7 @@
 ﻿using Althaus_Warehouse.Models.DTO.ItemDTOs;
 using Althaus_Warehouse.Models.Entities;
 using Althaus_Warehouse.Services.Repositories;
-using AutoMapper; // Include AutoMapper for DTO to Entity mapping
+using AutoMapper; 
 
 namespace Althaus_Warehouse.Services.ItemService
 {
@@ -9,7 +9,7 @@ namespace Althaus_Warehouse.Services.ItemService
     {
         private readonly IItemRepository _itemRepository;
         private readonly IItemTypeRepository _itemTypeRepository;
-        private readonly IMapper _mapper; // AutoMapper instance
+        private readonly IMapper _mapper; 
 
         public ItemService(IItemRepository itemRepository, IItemTypeRepository itemTypeRepository, IMapper mapper)
         {
@@ -72,5 +72,29 @@ namespace Althaus_Warehouse.Services.ItemService
             await _itemRepository.DeleteItemAsync(itemId);
             await _itemRepository.SaveChangesAsync(); // Save changes
         }
+
+
+        public async Task<IEnumerable<Item>> GetItemsByCategoryTypeNameAsync(string categoryTypeName)
+        {
+            // Retrieve the ItemType using the provided name
+            var itemType = await _itemTypeRepository.GetItemTypeByNameAsync(categoryTypeName);
+            if (itemType == null)
+            {
+                throw new KeyNotFoundException($"CategoryType with name {categoryTypeName} not found.");
+            }
+
+            // Fetch items associated with the found ItemType
+            return await _itemRepository.GetItemsByCategoryIdAsync(itemType.Id);
+        }
+
+
+
+        public async Task<IEnumerable<Item>> GetItemsByItemTypeIdAsync(int itemTypeId)
+        {
+            // Fetch items by the provided ItemTypeId
+            return await _itemRepository.GetItemsByCategoryIdAsync(itemTypeId);
+        }
+
+
     }
 }

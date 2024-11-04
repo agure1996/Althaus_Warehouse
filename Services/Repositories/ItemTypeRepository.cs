@@ -34,7 +34,10 @@ namespace Althaus_Warehouse.Services.Repositories
         public async Task<ItemType?> GetItemTypeByNameAsync(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) return null;
-            return await _context.ItemTypes.FirstOrDefaultAsync(it => it.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+            // Convert both the name in the database and the input name to lowercase for comparison
+            return await _context.ItemTypes
+                .FirstOrDefaultAsync(it => it.Name.ToLower() == name.ToLower());
         }
 
         /// <inheritdoc/>

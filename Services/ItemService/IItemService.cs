@@ -13,6 +13,9 @@ namespace Althaus_Warehouse.Services.ItemService
         Task<Item> CreateItemAsync(CreateItemDTO itemDTO);
         Task UpdateItemAsync(int itemId, UpdateItemDTO itemDTO);
         Task DeleteItemAsync(int itemId);
+
+        Task<IEnumerable<Item>> GetItemsByCategoryTypeNameAsync(string?  categoryTypeName);
+        Task<IEnumerable<Item>> GetItemsByItemTypeIdAsync(int itemTypeId);
     }
 
 

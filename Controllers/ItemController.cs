@@ -22,6 +22,7 @@ namespace Althaus_Warehouse.Controllers
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _itemService = itemService ?? throw new ArgumentNullException(nameof(itemService));
+            _itemService = itemService ?? throw new ArgumentNullException(nameof(itemService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -140,5 +141,58 @@ namespace Althaus_Warehouse.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
             }
         }
+
+
+        [HttpGet("category")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<GetItemDTO>>> GetItemsByItemTypeId([FromQuery] int itemTypeId)
+        {
+            try
+            {
+                var items = await _itemService.GetItemsByItemTypeIdAsync(itemTypeId);
+                if (items == null || !items.Any())
+                {
+                    _logger.LogWarning("No items found for Item Type ID {ItemTypeId}.", itemTypeId);
+                    return NotFound($"No items found for Item Type ID {itemTypeId}.");
+                }
+
+                var itemDTOs = _mapper.Map<IEnumerable<GetItemDTO>>(items);
+                return Ok(itemDTOs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving items for Item Type ID {ItemTypeId}.", itemTypeId);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
+
+
+       
+        [HttpGet("category/name")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<GetItemDTO>>> GetItemsByItemTypeName([FromQuery] string? categoryTypeName)
+        {
+            try
+            {
+                var items = await _itemService.GetItemsByCategoryTypeNameAsync(categoryTypeName);
+                if (items == null || !items.Any())
+                {
+                    _logger.LogWarning("No items found for Category Name {CategoryTypeName}.", categoryTypeName);
+                    return NotFound("No items found for the given category criteria.");
+                }
+
+                var itemDTOs = _mapper.Map<IEnumerable<GetItemDTO>>(items);
+                return Ok(itemDTOs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving items for Category Name {CategoryTypeName}.", categoryTypeName);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
     }
 }
+
+

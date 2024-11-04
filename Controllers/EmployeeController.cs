@@ -187,5 +187,7 @@ namespace Althaus_Warehouse.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
             }
         }
+
+
     }
 }

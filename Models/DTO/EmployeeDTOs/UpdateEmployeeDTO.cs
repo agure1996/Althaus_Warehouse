@@ -8,6 +8,7 @@ namespace Althaus_Warehouse.Models.DTO.EmployeeDTOs
     /// </summary>
     public class UpdateEmployeeDTO
     {
+
         /// <summary>
         /// First name of the employee
         /// </summary>
