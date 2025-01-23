@@ -9,6 +9,7 @@ namespace Althaus_Warehouse.Models.DTO.ItemDTOs
         public string? Name { get; set; }
 
         [MaxLength(200, ErrorMessage = "Description cannot exceed 200 characters.")]
+        [Required(ErrorMessage = "Description is required.")]
         public string? Description { get; set; }
 
         [Required(ErrorMessage = "Quantity is required.")]

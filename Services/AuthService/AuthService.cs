@@ -17,7 +17,7 @@ public class AuthService : IAuthService
     {
         _configuration = configuration; // Initialize IConfiguration
         _secretKey = configuration["Authentication:SecretKey"];
-        _context = context; // Initialize your DbContext
+        _context = context; // Initialize the DbContext
     }
 
     public string GenerateToken(string email, string role)

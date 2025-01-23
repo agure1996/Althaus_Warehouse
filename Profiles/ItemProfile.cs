@@ -13,13 +13,13 @@ public class ItemProfile : Profile
         /// </summary>
         CreateMap<Item, GetItemDTO>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id)) // Explicitly map Id
-            .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.DateCreated)))
             .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.ItemType != null ? new ItemTypeDTO
             {
                 Id = src.ItemType.Id,
                 Name = src.ItemType.Name,
                 Description = src.ItemType.Description
             } : null))
+            .ForMember(dest => dest.DateCreated, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.DateCreated)))
             .ForMember(dest => dest.InStock, opt => opt.MapFrom(src => src.Quantity > 0));
 
 

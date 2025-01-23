@@ -31,7 +31,7 @@ namespace Althaus_Warehouse.Services.ItemService
             return (List<ItemType>)(itemTypes ?? new List<ItemType>());
         }
 
-        public async Task<Item> CreateItemAsync(CreateItemDTO itemDTO)
+        public async Task<GetItemDTO> CreateItemAsync(CreateItemDTO itemDTO)
         {
             // Map CreateItemDTO to Item entity
             var item = _mapper.Map<Item>(itemDTO);
@@ -41,7 +41,7 @@ namespace Althaus_Warehouse.Services.ItemService
             await _itemRepository.CreateItemAsync(item);
             await _itemRepository.SaveChangesAsync(); // Save changes to the database
 
-            return item; // Return the created item or any relevant DTO
+            return _mapper.Map<GetItemDTO>(item); ; // Return the created item or any relevant DTO
         }
 
         public async Task UpdateItemAsync(int itemId, UpdateItemDTO itemDTO)

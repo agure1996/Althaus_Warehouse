@@ -16,6 +16,9 @@ namespace Althaus_Warehouse
     {
         public static void Main(string[] args)
         {
+            var builder = WebApplication.CreateBuilder(args);
+
+
             // Set up Serilog for logging
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -23,7 +26,6 @@ namespace Althaus_Warehouse
                 .WriteTo.File("logs/warehouse_logs.txt", rollingInterval: RollingInterval.Hour)
                 .CreateLogger();
 
-            var builder = WebApplication.CreateBuilder(args);
 
             // Use Serilog for logging
             builder.Host.UseSerilog();
