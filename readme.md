@@ -51,13 +51,13 @@ The Althaus Warehouse Manager is a web application designed to streamline wareho
 - Introduced additional front-end components for better user interaction.
 - Connected the user interface with back-end CRUD operations for seamless data management.
 
-## Version 2.0.0
+## Version 1.0.0
 **Major Backend Overhaul:**
 - Refactored backend architecture to allow scalable handling of warehouse operations.
 - Improved item search functionality to include more advanced filters (by type, quantity, and location).
 - Implemented proper error handling for API endpoints.
 
-## Version 2.1.0
+## Version 1.1.0
 **Security Enhancements:**
 - Introduced basic authentication features to restrict access to certain API functionalities.
 - Implemented input validation to prevent SQL injections and ensure data integrity.
@@ -67,33 +67,31 @@ The Althaus Warehouse Manager is a web application designed to streamline wareho
 - Redesigned the user interface for better accessibility and usability.
 - Introduced new styles to improve overall user experience and make the dashboard more intuitive.
 
-## Version 2.3.0
+## Version 1.3.0
 **Reporting Feature:**
 - Added reporting functionality that allows users to generate reports based on warehouse data.
 - Reports include inventory status, item count, and warehouse capacity.
 
-## Version 2.4.0
+## Version 1.4.0
 **Automated Testing:**
 - Integrated unit tests for critical endpoints to ensure backend stability and performance.
 - Expanded Postman testing collection with automated tests for CRUD operations.
 
-## Version 2.5.0
+## Version 1.5.0
 **Performance Optimization:**
-- Optimized database queries to significantly reduce response time on high-volume data requests.
-- Implemented caching mechanisms for frequently accessed data.
+- Optimized database queries to significantly reduce response time on high-volume data requests by using repository functions.
 
-## Version 2.6.0
-**Warehouse Location Mapping:**
-- Added the ability to assign and map items to specific warehouse locations.
-- Enhanced the UI to display item locations on a warehouse map.
+## Version 1.6.0
+**Warehouse category Mapping:**
+- Added the ability to assign and map items to specific categories.
 
-## Version 2.6.1
+## Version 1.6.1
 **Bug Fixes:**
-- Fixed bugs related to item creation and location assignment.
-- Addressed issues with data not saving properly during bulk updates.
+- Fixed bugs related to item creation and category assignment.
 
-## Version 2.6.2 (Latest)
+
+## Version 1.6.2 (Latest)
 **Final Touches & Enhancements:**
 - Enhanced error messages for API validation failures.
-- Finalized the location mapping feature with improved UI controls for location selection.
+- Finalized the mapping feature with improved UI controls for category selection.
 - Minor fixes in CSS for consistent user interface across different screen sizes.
